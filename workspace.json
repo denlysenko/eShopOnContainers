@@ -1,7 +1,61 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "catalog-service": {
+      "root": "apps/catalog-service",
+      "sourceRoot": "apps/catalog-service/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/catalog-service",
+            "main": "apps/catalog-service/src/main.ts",
+            "tsConfig": "apps/catalog-service/tsconfig.app.json",
+            "assets": ["apps/catalog-service/src/assets"],
+            "generatePackageJson": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/catalog-service/src/environments/environment.ts",
+                  "with": "apps/catalog-service/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "catalog-service:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/catalog-service/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/catalog-service"],
+          "options": {
+            "jestConfig": "apps/catalog-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "catalog-service"
 }
