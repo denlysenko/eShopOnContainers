@@ -12,6 +12,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { exceptionFactory } from './app/exception.factory';
 import { CatalogDomainExceptionFilter } from './app/filters/catalog-domain-exception.filter';
+import { EntityNotFoundExceptionFilter } from './app/filters/entity-not-found-exception.filter';
 import { HttpLoggingInterceptor } from './app/interceptors/http-logging.interceptor';
 
 async function bootstrap() {
@@ -22,7 +23,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
-  app.useGlobalFilters(new CatalogDomainExceptionFilter());
+  app.useGlobalFilters(
+    new CatalogDomainExceptionFilter(),
+    new EntityNotFoundExceptionFilter()
+  );
   app.useGlobalInterceptors(new HttpLoggingInterceptor());
 
   const port = process.env.PORT || 3000;

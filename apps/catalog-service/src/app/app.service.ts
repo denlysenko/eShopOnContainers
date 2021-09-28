@@ -1,5 +1,3 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Raw, Repository } from 'typeorm';
 import { CatalogBrandEntity } from './database/entities/catalog-brand.entity';
 import { CatalogItemEntity } from './database/entities/catalog-item.entity';
@@ -12,18 +10,15 @@ import { CatalogItemUpdateDto } from './dto/catalog-item-update.dto';
 import { CatalogItemsReadDto } from './dto/catalog-items-read.dto';
 import { CatalogTypeCreateDto } from './dto/catalog-type-create.dto';
 import { CatalogTypeReadDto } from './dto/catalog-type-read.dto';
+import { EntityNotFoundException } from './exceptions/entity-not-found.exception';
 import { CatalogBrandMapper } from './mappers/catalog-brand.mapper';
 import { CatalogItemMapper } from './mappers/catalog-item.mapper';
 import { CatalogTypeMapper } from './mappers/catalog-type.mapper';
 
-@Injectable()
 export class AppService {
   constructor(
-    @InjectRepository(CatalogItemEntity)
     private readonly _catalogItemRepository: Repository<CatalogItemEntity>,
-    @InjectRepository(CatalogTypeEntity)
     private readonly _catalogTypeRepository: Repository<CatalogTypeEntity>,
-    @InjectRepository(CatalogBrandEntity)
     private readonly _catalogBrandRepository: Repository<CatalogBrandEntity>
   ) {}
 
@@ -55,7 +50,7 @@ export class AppService {
     });
 
     if (!catalogItem) {
-      throw new NotFoundException(`Catalog Item with id ${id} not found`);
+      throw new EntityNotFoundException(`Catalog Item with id ${id} not found`);
     }
 
     return CatalogItemMapper.toReadItemDto(catalogItem);
@@ -147,7 +142,7 @@ export class AppService {
     const catalogItem = await this._catalogItemRepository.findOne(id);
 
     if (!catalogItem) {
-      throw new NotFoundException(`Catalog Item with id ${id} not found`);
+      throw new EntityNotFoundException(`Catalog Item with id ${id} not found`);
     }
 
     await this._catalogItemRepository.update(id, updateCatalogItemDto);
@@ -170,7 +165,7 @@ export class AppService {
     const catalogItem = await this._catalogItemRepository.findOne(id);
 
     if (!catalogItem) {
-      throw new NotFoundException(`Catalog Item with id ${id} not found`);
+      throw new EntityNotFoundException(`Catalog Item with id ${id} not found`);
     }
 
     await this._catalogItemRepository.delete(id);
@@ -189,7 +184,7 @@ export class AppService {
     const catalogType = await this._catalogTypeRepository.findOne(id);
 
     if (!catalogType) {
-      throw new NotFoundException(`Catalog Type with id ${id} not found`);
+      throw new EntityNotFoundException(`Catalog Type with id ${id} not found`);
     }
 
     const { raw } = await this._catalogTypeRepository
@@ -220,7 +215,7 @@ export class AppService {
     const catalogType = await this._catalogTypeRepository.findOne(id);
 
     if (!catalogType) {
-      throw new NotFoundException(`Catalog Type with id ${id} not found`);
+      throw new EntityNotFoundException(`Catalog Type with id ${id} not found`);
     }
 
     await this._catalogTypeRepository.delete(id);
@@ -239,7 +234,9 @@ export class AppService {
     const catalogBrand = await this._catalogBrandRepository.findOne(id);
 
     if (!catalogBrand) {
-      throw new NotFoundException(`Catalog Brand with id ${id} not found`);
+      throw new EntityNotFoundException(
+        `Catalog Brand with id ${id} not found`
+      );
     }
 
     const { raw } = await this._catalogBrandRepository
@@ -270,7 +267,9 @@ export class AppService {
     const catalogBrand = await this._catalogBrandRepository.findOne(id);
 
     if (!catalogBrand) {
-      throw new NotFoundException(`Catalog Brand with id ${id} not found`);
+      throw new EntityNotFoundException(
+        `Catalog Brand with id ${id} not found`
+      );
     }
 
     await this._catalogBrandRepository.delete(id);
