@@ -52,6 +52,28 @@
           }
         }
       }
+    },
+    "event-bus": {
+      "root": "libs/event-bus",
+      "sourceRoot": "libs/event-bus/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/event-bus/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/event-bus"],
+          "options": {
+            "jestConfig": "libs/event-bus/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

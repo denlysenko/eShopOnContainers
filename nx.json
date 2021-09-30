@@ -29,6 +29,9 @@
   "projects": {
     "catalog-service": {
       "tags": []
+    },
+    "event-bus": {
+      "tags": []
     }
   }
 }

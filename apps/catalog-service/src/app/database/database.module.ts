@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CatalogBrandEntity } from './entities/catalog-brand.entity';
 import { CatalogItemEntity } from './entities/catalog-item.entity';
 import { CatalogTypeEntity } from './entities/catalog-type.entity';
+import { OutboxEntity } from './entities/outbox.entity';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { CatalogTypeEntity } from './entities/catalog-type.entity';
       CatalogBrandEntity,
       CatalogItemEntity,
       CatalogTypeEntity,
+      OutboxEntity,
     ]),
   ],
   exports: [TypeOrmModule],

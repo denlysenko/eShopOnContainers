@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: ./apps/catalog-service/docker/build-app/Dockerfile
+    environment:
+      - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
     ports:
       - '3000:3000'
     depends_on:
@@ -22,6 +24,13 @@ services:
       - POSTGRES_DATABASES=${PG_CATALOG_DB}:${PG_CATALOG_USER}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - '15672:15672'
+      - '5672:5672'
 
   catalog-db-migrate:
     build:

@@ -1,7 +1,8 @@
-import { Raw, Repository } from 'typeorm';
+import { Connection, Raw, Repository } from 'typeorm';
 import { CatalogBrandEntity } from './database/entities/catalog-brand.entity';
 import { CatalogItemEntity } from './database/entities/catalog-item.entity';
 import { CatalogTypeEntity } from './database/entities/catalog-type.entity';
+import { OutboxEntity } from './database/entities/outbox.entity';
 import { CatalogBrandCreateDto } from './dto/catalog-brand-create.dto';
 import { CatalogBrandReadDto } from './dto/catalog-brand-read.dto';
 import { CatalogItemCreateDto } from './dto/catalog-item-create.dto';
@@ -10,16 +11,21 @@ import { CatalogItemUpdateDto } from './dto/catalog-item-update.dto';
 import { CatalogItemsReadDto } from './dto/catalog-items-read.dto';
 import { CatalogTypeCreateDto } from './dto/catalog-type-create.dto';
 import { CatalogTypeReadDto } from './dto/catalog-type-read.dto';
+import { ProductPriceChangedEvent } from './events/product-price-changed.event';
 import { EntityNotFoundException } from './exceptions/entity-not-found.exception';
 import { CatalogBrandMapper } from './mappers/catalog-brand.mapper';
 import { CatalogItemMapper } from './mappers/catalog-item.mapper';
 import { CatalogTypeMapper } from './mappers/catalog-type.mapper';
+import { OutboxService } from './outbox/outbox.service';
 
 export class AppService {
   constructor(
     private readonly _catalogItemRepository: Repository<CatalogItemEntity>,
     private readonly _catalogTypeRepository: Repository<CatalogTypeEntity>,
-    private readonly _catalogBrandRepository: Repository<CatalogBrandEntity>
+    private readonly _catalogBrandRepository: Repository<CatalogBrandEntity>,
+    private readonly _outboxRepository: Repository<OutboxEntity>,
+    private readonly _connection: Connection,
+    private readonly _outboxService: OutboxService
   ) {}
 
   async getItems(
@@ -145,7 +151,35 @@ export class AppService {
       throw new EntityNotFoundException(`Catalog Item with id ${id} not found`);
     }
 
-    await this._catalogItemRepository.update(id, updateCatalogItemDto);
+    const oldPrice = catalogItem.price;
+    const raiseProductPriceChangedEvent =
+      updateCatalogItemDto.price && oldPrice !== updateCatalogItemDto.price;
+
+    if (raiseProductPriceChangedEvent) {
+      const event = new ProductPriceChangedEvent(
+        catalogItem.id,
+        updateCatalogItemDto.price,
+        catalogItem.price
+      );
+
+      const outboxMessage = this._outboxRepository.create({
+        id: event.id,
+        payload: JSON.stringify(event),
+      });
+
+      await this._connection.manager.transaction(async (entityManager) => {
+        await entityManager.update(
+          CatalogItemEntity,
+          { id },
+          updateCatalogItemDto
+        );
+        await entityManager.insert(OutboxEntity, outboxMessage);
+      });
+
+      await this._outboxService.publishThroughEventBus(event);
+    } else {
+      await this._catalogItemRepository.update(id, updateCatalogItemDto);
+    }
 
     return this.getItemById(id);
   }
@@ -156,7 +190,7 @@ export class AppService {
     const catalogItem =
       this._catalogItemRepository.create(createCatalogItemDto);
 
-    await catalogItem.save();
+    await this._catalogItemRepository.insert(catalogItem);
 
     return this.getItemById(catalogItem.id);
   }
