@@ -16,7 +16,6 @@ import { EntityNotFoundException } from './exceptions/entity-not-found.exception
 import { CatalogBrandMapper } from './mappers/catalog-brand.mapper';
 import { CatalogItemMapper } from './mappers/catalog-item.mapper';
 import { CatalogTypeMapper } from './mappers/catalog-type.mapper';
-import { OutboxService } from './outbox/outbox.service';
 
 export class AppService {
   constructor(
@@ -24,8 +23,7 @@ export class AppService {
     private readonly _catalogTypeRepository: Repository<CatalogTypeEntity>,
     private readonly _catalogBrandRepository: Repository<CatalogBrandEntity>,
     private readonly _outboxRepository: Repository<OutboxEntity>,
-    private readonly _connection: Connection,
-    private readonly _outboxService: OutboxService
+    private readonly _connection: Connection
   ) {}
 
   async getItems(
@@ -175,8 +173,6 @@ export class AppService {
         );
         await entityManager.insert(OutboxEntity, outboxMessage);
       });
-
-      await this._outboxService.publishThroughEventBus(event);
     } else {
       await this._catalogItemRepository.update(id, updateCatalogItemDto);
     }

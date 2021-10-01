@@ -5,33 +5,31 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { MessageStatus } from '../constants';
 import { OutboxEntity } from '../database/entities/outbox.entity';
-import { OutboxService } from './outbox.service';
+import { OutboxService } from '../outbox/outbox.service';
 
 @Injectable()
-export class OutboxScheduler {
-  private readonly _logger = new Logger(OutboxScheduler.name);
+export class MessageProcessor {
+  private readonly _logger = new Logger(MessageProcessor.name);
 
   constructor(
     @InjectRepository(OutboxEntity)
     private readonly _outboxRepository: Repository<OutboxEntity>,
     private readonly _outboxService: OutboxService
-  ) {}
+  ) {
+    this._logger.debug('Starting Message Processor');
+  }
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
-  async handleCron() {
-    this._logger.debug(
-      `Fetching messages from outbox with status '${MessageStatus.PENDING}' and '${MessageStatus.FAILED}'`
-    );
-
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async processMessages() {
     const messages = await this._outboxRepository.find({
       where: {
         status: In([MessageStatus.PENDING, MessageStatus.FAILED]),
       },
     });
 
-    this._logger.debug(`Found ${messages.length} unpublished messages`);
-
     if (messages.length) {
+      this._logger.debug(`Found ${messages.length} unpublished messages`);
+
       for (const message of messages) {
         const payload: IntegrationEvent = JSON.parse(message.payload);
         await this._outboxService.publishThroughEventBus(payload);
