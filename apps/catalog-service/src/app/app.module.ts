@@ -5,19 +5,28 @@ import {
 import { Logger, Module } from '@nestjs/common';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { ScheduleModule } from '@nestjs/schedule';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { RBMQ_MESSAGE_BUS_CLIENT } from './constants';
-import { DatabaseModule } from './database/database.module';
-import { CatalogBrandEntity } from './database/entities/catalog-brand.entity';
-import { CatalogItemEntity } from './database/entities/catalog-item.entity';
-import { CatalogTypeEntity } from './database/entities/catalog-type.entity';
-import { OutboxEntity } from './database/entities/outbox.entity';
-import { MessageProcessor } from './message-processor/message.processor';
-import { OutboxService } from './outbox/outbox.service';
-import { RbmqEventBusClient } from './rbmq-event-bus/rbmq-event-bus.client';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  AppService,
+  CatalogBrandRepository,
+  CatalogItemRepository,
+  CatalogTypeRepository,
+  CATALOG_BRAND_REPOSITORY,
+  CATALOG_ITEM_REPOSITORY,
+  CATALOG_TYPE_REPOSITORY,
+  OutboxRepository,
+  OutboxService,
+  OUTBOX_REPOSITORY,
+  RBMQ_MESSAGE_BUS_CLIENT,
+  UnitOfWork,
+} from './application';
+import { AppController } from './controllers';
+import {
+  DatabaseModule,
+  MessageProcessor,
+  RbmqEventBusClient,
+  TypeOrmUnitOfWork,
+} from './infrastructure';
 
 const queue = process.env.EVENT_QUEUE_NAME;
 const eventBusConnection =
@@ -59,37 +68,37 @@ const eventBusConnection =
       provide: OutboxService,
       useFactory: (
         eventBusClient: EventBusClient,
-        outboxRepository: Repository<OutboxEntity>
+        outboxRepository: OutboxRepository
       ) =>
         new OutboxService(
           eventBusClient,
           outboxRepository,
           new Logger(OutboxService.name)
         ),
-      inject: [EVENT_BUS_CLIENT, getRepositoryToken(OutboxEntity)],
+      inject: [EVENT_BUS_CLIENT, OUTBOX_REPOSITORY],
     },
     {
       provide: AppService,
       useFactory: (
-        catalogItemRepository: Repository<CatalogItemEntity>,
-        catalogTypeRepository: Repository<CatalogTypeEntity>,
-        catalogBrandRepository: Repository<CatalogBrandEntity>,
-        outboxRepository: Repository<OutboxEntity>,
-        connection: Connection
+        catalogItemRepository: CatalogItemRepository,
+        catalogTypeRepository: CatalogTypeRepository,
+        catalogBrandRepository: CatalogBrandRepository,
+        outboxRepository: OutboxRepository,
+        unitOfWork: UnitOfWork
       ) =>
         new AppService(
           catalogItemRepository,
           catalogTypeRepository,
           catalogBrandRepository,
           outboxRepository,
-          connection
+          unitOfWork
         ),
       inject: [
-        getRepositoryToken(CatalogItemEntity),
-        getRepositoryToken(CatalogTypeEntity),
-        getRepositoryToken(CatalogBrandEntity),
-        getRepositoryToken(OutboxEntity),
-        Connection,
+        CATALOG_ITEM_REPOSITORY,
+        CATALOG_TYPE_REPOSITORY,
+        CATALOG_BRAND_REPOSITORY,
+        OUTBOX_REPOSITORY,
+        TypeOrmUnitOfWork,
       ],
     },
   ],

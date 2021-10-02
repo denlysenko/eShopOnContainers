@@ -11,9 +11,11 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { exceptionFactory } from './app/exception.factory';
-import { CatalogDomainExceptionFilter } from './app/filters/catalog-domain-exception.filter';
-import { EntityNotFoundExceptionFilter } from './app/filters/entity-not-found-exception.filter';
-import { HttpLoggingInterceptor } from './app/interceptors/http-logging.interceptor';
+import {
+  CatalogDomainExceptionFilter,
+  EntityNotFoundExceptionFilter,
+  HttpLoggingInterceptor,
+} from './app/infrastructure';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

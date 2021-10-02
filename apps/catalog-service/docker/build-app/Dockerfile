@@ -1,11 +1,12 @@
-FROM node:16-alpine3.14 AS build
+FROM node:16.10.0-alpine3.14 AS build
 WORKDIR /app
 COPY package*.json .
 RUN npm install --development
 COPY . .
+RUN npm test -- catalog-service
 RUN npm run build -- catalog-service --prod
 
-FROM node:16-alpine3.14 AS prod
+FROM node:16.10.0-alpine3.14 AS prod
 COPY --from=build /app/dist/apps/catalog-service .
 COPY --from=build /app/apps/catalog-service/.env .env
 RUN npm install --production
