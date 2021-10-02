@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  catalog-service-e2e:
+    build:
+      context: .
+      dockerfile: ./apps/catalog-service/docker/test-app/Dockerfile
+    environment:
+      - PG_CONNECTION_STRING=postgres://${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}@postgres/catalog-db-test
+      - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: denlysenko/postgres-multi
+    env_file: .env
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}
+      - POSTGRES_DATABASES=catalog-db-test:${PG_CATALOG_USER}
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - '15672:15672'
+      - '5672:5672'
