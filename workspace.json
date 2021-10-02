@@ -50,6 +50,14 @@
             "jestConfig": "apps/catalog-service/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "e2e": {
+          "executor": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/catalog-service/jest-e2e.config.js",
+            "codeCoverage": false,
+            "passWithNoTests": true
+          }
         }
       }
     },
