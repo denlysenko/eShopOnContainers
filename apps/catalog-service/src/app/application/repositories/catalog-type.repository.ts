@@ -5,7 +5,6 @@ export interface CatalogTypeRepository {
   findById(id: number): Promise<CatalogType>;
   update(id: number, catalogType: Partial<CatalogType>): Promise<CatalogType>;
   create(catalogType: Omit<CatalogType, 'id'>): Promise<CatalogType>;
-  delete(id: number): Promise<void>;
 }
 
 export const CATALOG_TYPE_REPOSITORY = Symbol('CatalogTypeRepository');

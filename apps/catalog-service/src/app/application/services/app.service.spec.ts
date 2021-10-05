@@ -498,44 +498,6 @@ describe('AppService', () => {
     });
   });
 
-  describe('deleteCatalogType', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(catalogTypeRepositoryMock, 'findById')
-        .mockResolvedValue(catalogTypeMock);
-
-      jest.spyOn(catalogTypeRepositoryMock, 'delete').mockResolvedValue(null);
-    });
-
-    it('should call findById with correct params', async () => {
-      await service.deleteCatalogType(catalogTypeMock.id);
-
-      expect(catalogTypeRepositoryMock.findById).toHaveBeenCalledWith(
-        catalogTypeMock.id
-      );
-    });
-
-    it('should throw EntityNotFoundException', async () => {
-      jest
-        .spyOn(catalogTypeRepositoryMock, 'findById')
-        .mockResolvedValueOnce(null);
-
-      try {
-        await service.deleteCatalogType(catalogTypeMock.id);
-      } catch (error) {
-        expect(error).toBeInstanceOf(EntityNotFoundException);
-      }
-    });
-
-    it('should call delete', async () => {
-      await service.deleteCatalogType(catalogTypeMock.id);
-
-      expect(catalogTypeRepositoryMock.delete).toHaveBeenCalledWith(
-        catalogTypeMock.id
-      );
-    });
-  });
-
   describe('getCatalogBrands', () => {
     beforeEach(() => {
       jest
@@ -632,44 +594,6 @@ describe('AppService', () => {
     it('should return transformed catalog type', async () => {
       expect(await service.createCatalogBrand(createCatalogBrandDto)).toEqual(
         catalogBrandMock
-      );
-    });
-  });
-
-  describe('deleteCatalogBrand', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(catalogBrandRepositoryMock, 'findById')
-        .mockResolvedValue(catalogBrandMock);
-
-      jest.spyOn(catalogBrandRepositoryMock, 'delete').mockResolvedValue(null);
-    });
-
-    it('should call findById with correct params', async () => {
-      await service.deleteCatalogBrand(catalogBrandMock.id);
-
-      expect(catalogBrandRepositoryMock.findById).toHaveBeenCalledWith(
-        catalogBrandMock.id
-      );
-    });
-
-    it('should throw EntityNotFoundException', async () => {
-      jest
-        .spyOn(catalogBrandRepositoryMock, 'findById')
-        .mockResolvedValueOnce(null);
-
-      try {
-        await service.deleteCatalogBrand(catalogBrandMock.id);
-      } catch (error) {
-        expect(error).toBeInstanceOf(EntityNotFoundException);
-      }
-    });
-
-    it('should call delete', async () => {
-      await service.deleteCatalogBrand(catalogBrandMock.id);
-
-      expect(catalogBrandRepositoryMock.delete).toHaveBeenCalledWith(
-        catalogBrandMock.id
       );
     });
   });

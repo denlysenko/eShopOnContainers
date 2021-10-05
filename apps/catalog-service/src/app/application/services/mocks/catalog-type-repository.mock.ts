@@ -5,5 +5,4 @@ export const catalogTypeRepositoryMock: CatalogTypeRepository = {
   findById: jest.fn(),
   update: jest.fn(),
   create: jest.fn(),
-  delete: jest.fn(),
 };

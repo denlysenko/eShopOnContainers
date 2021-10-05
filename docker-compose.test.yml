@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  catalog-service-e2e:
+  catalog-service-tests:
     build:
       context: .
       dockerfile: ./apps/catalog-service/docker/test-app/Dockerfile

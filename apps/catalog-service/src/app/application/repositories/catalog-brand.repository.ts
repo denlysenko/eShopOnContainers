@@ -10,7 +10,6 @@ export interface CatalogBrandRepository {
   create(
     catalogBrandCatalogBrand: Omit<CatalogBrand, 'id'>
   ): Promise<CatalogBrand>;
-  delete(id: number): Promise<void>;
 }
 
 export const CATALOG_BRAND_REPOSITORY = Symbol('CatalogBrandRepository');

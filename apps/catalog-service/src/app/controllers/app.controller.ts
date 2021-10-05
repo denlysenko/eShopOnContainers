@@ -335,22 +335,6 @@ export class AppController {
     return this.appService.createCatalogType(catalogTypeDto);
   }
 
-  // DELETE api/v1/catalog/catalog-types/{catalogTypeId}
-  @Delete('catalog-types/:id')
-  @ApiTags('Catalog Types')
-  @ApiOperation({ summary: 'Delete catalog type' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Record deleted',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not Found Error',
-  })
-  deleteCatalogType(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.appService.deleteCatalogType(id);
-  }
-
   // GET api/v1/catalog/catalog-brands
   @Get('catalog-brands')
   @ApiTags('Catalog Brands')
@@ -408,21 +392,5 @@ export class AppController {
     @Body() catalogBrandDto: CatalogBrandCreateDto
   ): Promise<CatalogBrandReadDto> {
     return this.appService.createCatalogBrand(catalogBrandDto);
-  }
-
-  // DELETE api/v1/catalog/catalog-brands/{catalogBrandId}
-  @Delete('catalog-brands/:id')
-  @ApiTags('Catalog Brands')
-  @ApiOperation({ summary: 'Delete catalog brand' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Record deleted',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not Found Error',
-  })
-  deleteCatalogBrand(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.appService.deleteCatalogBrand(id);
   }
 }

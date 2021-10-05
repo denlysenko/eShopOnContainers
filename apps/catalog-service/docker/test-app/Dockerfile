@@ -5,4 +5,4 @@ RUN npm install --development
 COPY . .
 ENV NODE_ENV=test
 RUN apk add --no-cache bash
-CMD ["/bin/bash", "-c", "npm run e2e -- catalog-service"]
+CMD ["/bin/bash", "-c", "npm test -- catalog-service && npm run e2e -- catalog-service"]

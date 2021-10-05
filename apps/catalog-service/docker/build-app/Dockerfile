@@ -3,7 +3,6 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install --development
 COPY . .
-RUN npm test -- catalog-service
 RUN npm run build -- catalog-service --prod
 
 FROM node:16.10.0-alpine3.14 AS prod

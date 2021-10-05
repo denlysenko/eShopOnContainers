@@ -202,16 +202,6 @@ export class AppService {
     return CatalogTypeMapper.toReadDto(createdCatalogType);
   }
 
-  async deleteCatalogType(id: number): Promise<void> {
-    const catalogType = await this._catalogTypeRepository.findById(id);
-
-    if (!catalogType) {
-      throw new EntityNotFoundException(`Catalog Type with id ${id} not found`);
-    }
-
-    await this._catalogTypeRepository.delete(id);
-  }
-
   async getCatalogBrands(): Promise<CatalogBrandReadDto[]> {
     const catalogBrands = await this._catalogBrandRepository.findAll();
 
@@ -246,17 +236,5 @@ export class AppService {
     );
 
     return CatalogBrandMapper.toReadDto(createdCatalogBrand);
-  }
-
-  async deleteCatalogBrand(id: number): Promise<void> {
-    const catalogBrand = await this._catalogBrandRepository.findById(id);
-
-    if (!catalogBrand) {
-      throw new EntityNotFoundException(
-        `Catalog Brand with id ${id} not found`
-      );
-    }
-
-    await this._catalogBrandRepository.delete(id);
   }
 }

@@ -43,8 +43,4 @@ export class DbCatalogBrandRepository implements CatalogBrandRepository {
 
     return raw[0];
   }
-
-  async delete(id: number): Promise<void> {
-    await this._catalogBrandRepository.delete(id);
-  }
 }
