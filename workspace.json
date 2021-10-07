@@ -82,6 +82,58 @@
           }
         }
       }
+    },
+    "ordering-service": {
+      "root": "apps/ordering-service",
+      "sourceRoot": "apps/ordering-service/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/ordering-service",
+            "main": "apps/ordering-service/src/main.ts",
+            "tsConfig": "apps/ordering-service/tsconfig.app.json",
+            "assets": ["apps/ordering-service/src/assets"],
+            "generatePackageJson": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/ordering-service/src/environments/environment.ts",
+                  "with": "apps/ordering-service/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "ordering-service:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/ordering-service/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/ordering-service"],
+          "options": {
+            "jestConfig": "apps/ordering-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

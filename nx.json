@@ -32,6 +32,9 @@
     },
     "event-bus": {
       "tags": []
+    },
+    "ordering-service": {
+      "tags": []
     }
   }
 }
