@@ -59,7 +59,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "event-bus": {
       "root": "libs/event-bus",
@@ -81,7 +82,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "logger": {
       "root": "libs/logger",
@@ -103,7 +105,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "ordering-service": {
       "root": "apps/ordering-service",
@@ -163,11 +166,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/nest"
-  },
-  "defaultProject": "catalog-service"
+  }
 }

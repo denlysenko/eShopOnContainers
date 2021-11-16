@@ -26,18 +26,8 @@
       }
     ]
   },
-  "projects": {
-    "catalog-service": {
-      "tags": []
-    },
-    "event-bus": {
-      "tags": []
-    },
-    "logger": {
-      "tags": []
-    },
-    "ordering-service": {
-      "tags": []
-    }
-  }
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "catalog-service"
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommandHandler } from '../commands/CommandHandler';
 import { Result } from '../Result';
 

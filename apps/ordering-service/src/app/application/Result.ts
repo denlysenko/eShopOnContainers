@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OrderingDomainException } from '../domain';
 
 export class Result<T> {
