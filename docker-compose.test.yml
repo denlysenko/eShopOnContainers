@@ -11,6 +11,16 @@ services:
     depends_on:
       - postgres
 
+  ordering-service-tests:
+    build:
+      context: .
+      dockerfile: ./apps/ordering-service/docker/test-app/Dockerfile
+    environment:
+      - PG_CONNECTION_STRING=postgres://${PG_ORDERING_USER}:${PG_ORDERING_PASSWORD}@postgres/ordering-db-test
+      - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+    depends_on:
+      - postgres
+
   postgres:
     container_name: postgres
     image: denlysenko/postgres-multi
@@ -18,8 +28,8 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}
-      - POSTGRES_DATABASES=catalog-db-test:${PG_CATALOG_USER}
+      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}|${PG_ORDERING_USER}:${PG_ORDERING_PASSWORD}
+      - POSTGRES_DATABASES=catalog-db-test:${PG_CATALOG_USER}|ordering-db-test:${PG_ORDERING_USER}
 
   rabbitmq:
     container_name: rabbitmq

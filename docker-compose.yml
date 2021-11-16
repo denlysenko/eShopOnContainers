@@ -13,6 +13,18 @@ services:
       - postgres
       - catalog-db-migrate
 
+  ordering-service:
+    build:
+      context: .
+      dockerfile: ./apps/ordering-service/docker/build-app/Dockerfile
+    environment:
+      - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+    ports:
+      - '3001:3000'
+    depends_on:
+      - postgres
+      - ordering-db-migrate
+
   postgres:
     container_name: postgres
     image: denlysenko/postgres-multi
@@ -20,8 +32,8 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}
-      - POSTGRES_DATABASES=${PG_CATALOG_DB}:${PG_CATALOG_USER}
+      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}|${PG_ORDERING_USER}:${PG_ORDERING_PASSWORD}
+      - POSTGRES_DATABASES=${PG_CATALOG_DB}:${PG_CATALOG_USER}|${PG_ORDERING_DB}:${PG_ORDERING_USER}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -36,6 +48,23 @@ services:
     build:
       context: .
       dockerfile: ./apps/catalog-service/docker/run-migrations/Dockerfile
+    env_file: .env
+    command:
+      [
+        './wait-for-it/wait-for-it.sh',
+        'postgres:5432',
+        '--',
+        '/bin/bash',
+        '-c',
+        'typeorm migration:run --config ./orm-docker.config.js',
+      ]
+    depends_on:
+      - postgres
+
+  ordering-db-migrate:
+    build:
+      context: .
+      dockerfile: ./apps/ordering-service/docker/run-migrations/Dockerfile
     env_file: .env
     command:
       [

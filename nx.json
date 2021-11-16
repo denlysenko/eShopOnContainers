@@ -33,6 +33,9 @@
     "event-bus": {
       "tags": []
     },
+    "logger": {
+      "tags": []
+    },
     "ordering-service": {
       "tags": []
     }

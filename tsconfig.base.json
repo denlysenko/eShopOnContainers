@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@e-shop-on-containers/event-bus": ["libs/event-bus/src/index.ts"]
+      "@e-shop-on-containers/event-bus": ["libs/event-bus/src/index.ts"],
+      "@e-shop-on-containers/logger": ["libs/logger/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
