@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -6,6 +6,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
+import { exceptionFactory } from './app/exception.factory';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -14,6 +15,7 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
 
   const port = process.env.PORT || 3000;
   const host = process.env.HOST || 'localhost';
