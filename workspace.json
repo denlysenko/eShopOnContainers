@@ -1,6 +1,67 @@
 {
   "version": 2,
   "projects": {
+    "basket-service": {
+      "root": "apps/basket-service",
+      "sourceRoot": "apps/basket-service/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/basket-service",
+            "main": "apps/basket-service/src/main.ts",
+            "tsConfig": "apps/basket-service/tsconfig.app.json",
+            "assets": ["apps/basket-service/src/assets"],
+            "generatePackageJson": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/basket-service/src/environments/environment.ts",
+                  "with": "apps/basket-service/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "basket-service:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/basket-service/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/basket-service"],
+          "options": {
+            "jestConfig": "apps/basket-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "e2e": {
+          "executor": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/basket-service/jest-e2e.config.js",
+            "codeCoverage": false,
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
     "catalog-service": {
       "root": "apps/catalog-service",
       "sourceRoot": "apps/catalog-service/src",
