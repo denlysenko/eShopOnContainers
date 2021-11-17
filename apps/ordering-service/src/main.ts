@@ -12,7 +12,7 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule, eventBusConnection, queue } from './app/app.module';
 import { exceptionFactory } from './app/exception.factory';
-import { EntityNotFoundExceptionFilter } from './app/infrastructure';
+import { EntityNotFoundExceptionFilter, HttpLoggingInterceptor } from './app/infrastructure';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -23,6 +23,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
+  app.useGlobalInterceptors(new HttpLoggingInterceptor());
 
   const port = process.env.PORT || 3000;
   const host = process.env.HOST || 'localhost';

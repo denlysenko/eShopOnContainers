@@ -9,5 +9,6 @@ export * from './database/typeorm-unit-of-work';
 export * from './decorators/identity';
 export * from './filters/entity-not-found-exception.filter';
 export * from './guards/auth.guard';
+export * from './interceptors/http-logging.interceptor';
 export * from './message-processor/message.processor';
 export * from './rbmq-event-bus/rbmq-event-bus.client';
