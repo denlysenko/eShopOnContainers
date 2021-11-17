@@ -12,7 +12,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOAuth2, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { validate } from 'class-validator';
 import {
   BasketItemDto,
@@ -43,12 +43,7 @@ export class AppController {
   // GET api/v1/orders
   @Get()
   @ApiOperation({ summary: 'Get orders for user' })
-  // TODO: replace with keycloak authorization
-  // https://stackoverflow.com/questions/41918845/keycloak-integration-in-swagger
-  @ApiHeader({
-    name: 'Authentication',
-    description: 'Authentication header',
-  })
+  @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Found records',
@@ -66,11 +61,7 @@ export class AppController {
   // GET api/v1/orders/:id
   @Get(':id')
   @ApiOperation({ summary: 'Get order by id' })
-  // TODO: replace with keycloak authorization
-  @ApiHeader({
-    name: 'Authentication',
-    description: 'Authentication header',
-  })
+  @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Found record',
@@ -91,11 +82,7 @@ export class AppController {
   // PUT api/v1/orders/:id/cancel
   @Put(':id/cancel')
   @ApiOperation({ summary: 'Cancels order' })
-  // TODO: replace with keycloak authorization
-  @ApiHeader({
-    name: 'Authentication',
-    description: 'Authentication header',
-  })
+  @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Cancel success',
@@ -130,11 +117,7 @@ export class AppController {
   // PUT api/v1/orders/:id/ship
   @Put(':id/ship')
   @ApiOperation({ summary: 'Ships order' })
-  // TODO: replace with keycloak authorization
-  @ApiHeader({
-    name: 'Authentication',
-    description: 'Authentication header',
-  })
+  @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Ship success',
@@ -169,11 +152,7 @@ export class AppController {
   // POST api/v1/orders/draft
   @Post('draft')
   @ApiOperation({ summary: 'Creates draft order' })
-  // TODO: replace with keycloak authorization
-  @ApiHeader({
-    name: 'Authentication',
-    description: 'Authentication header',
-  })
+  @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Ship success',
@@ -214,11 +193,7 @@ export class AppController {
   // GET api/v1/orders/card-types
   @Get('card-types')
   @ApiOperation({ summary: 'Get card types' })
-  // TODO: replace with keycloak authorization
-  @ApiHeader({
-    name: 'Authentication',
-    description: 'Authentication header',
-  })
+  @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Found records',

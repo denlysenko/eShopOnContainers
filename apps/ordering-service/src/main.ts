@@ -33,11 +33,28 @@ async function bootstrap() {
     .setDescription(
       'The Ordering Microservice HTTP API. This is a DDD/CQRS microservice'
     )
+    .addOAuth2({
+      type: 'oauth2',
+      flows: {
+        implicit: {
+          authorizationUrl:
+            'http://localhost:4000/auth/realms/e-shop-on-containers/protocol/openid-connect/auth',
+          scopes: {
+            openid: 'openid',
+          },
+        },
+      },
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('/swagger/v1', app, document);
+  SwaggerModule.setup('/swagger/v1', app, document, {
+    initOAuth: {
+      clientId: 'api_swagger',
+      additionalQueryStringParams: { nonce: '325qjlalf09230' },
+    },
+  });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
