@@ -7,4 +7,5 @@ export * from './repositories/basket.repository';
 export * from './repositories/inbox.repository';
 export * from './repositories/outbox.repository';
 export * from './services/app.service';
+export * from './services/outbox.service';
 export * from './services/unit-of-work';
