@@ -16,7 +16,7 @@ import {
   CustomerBasketReadDto,
   ValidationErrorDto,
 } from '../application';
-import { Identity } from '../infrastructure';
+import { Identity } from './decorators/identity';
 
 @Controller('v1/basket')
 export class AppController {
@@ -30,10 +30,6 @@ export class AppController {
     status: HttpStatus.OK,
     description: 'Found record',
     type: CustomerBasketReadDto,
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not Found Error',
   })
   getBasketById(
     @Identity() customerId: string
