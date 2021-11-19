@@ -4,6 +4,7 @@ export * from './dto/basket-item-read.dto';
 export * from './dto/customer-basket-read.dto';
 export * from './dto/validation-error.dto';
 export * from './events/product-price-changed.event';
+export * from './exceptions/entity-not-found.exception';
 export * from './repositories/basket.repository';
 export * from './repositories/inbox.repository';
 export * from './repositories/outbox.repository';
