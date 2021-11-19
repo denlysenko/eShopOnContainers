@@ -7,7 +7,11 @@ export interface BasketRepository {
     basket: CustomerBasket
   ): Promise<CustomerBasket>;
   deleteBasket(customerId: string): Promise<void>;
-  updateUnitPrice(productId: number, price: number): Promise<void>;
+  updateUnitPrice(
+    productId: number,
+    newPrice: number,
+    oldPrice: number
+  ): Promise<void>;
 }
 
 export const BASKET_REPOSITORY = Symbol('BasketRepository');
