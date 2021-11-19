@@ -71,7 +71,10 @@ export class AppService {
     );
 
     await this._unitOfWork.withTransaction(async () => {
-      await this._outboxRepository.create(event);
+      await this._outboxRepository.create({
+        id: event.id,
+        payload: JSON.stringify(event),
+      });
       await this._basketRepository.deleteBasket(customerId);
     });
   }

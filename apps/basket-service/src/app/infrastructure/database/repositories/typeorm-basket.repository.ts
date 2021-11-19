@@ -31,6 +31,10 @@ export class TypeOrmBasketRepository implements BasketRepository {
       where: { buyerId: customerId },
     });
 
+    if (basketItems.length === 0) {
+      return null;
+    }
+
     return new CustomerBasket(customerId, basketItems);
   }
 

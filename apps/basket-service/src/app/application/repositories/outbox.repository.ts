@@ -1,4 +1,4 @@
-import { Message } from '../models/message.model';
+import { Message } from '../../models';
 
 export interface OutboxRepository {
   create(message: Message): Promise<void>;
