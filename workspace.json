@@ -229,6 +229,100 @@
         }
       },
       "tags": []
+    },
+    "web-shopping": {
+      "projectType": "application",
+      "root": "apps/web-shopping",
+      "sourceRoot": "apps/web-shopping/src",
+      "prefix": "e-shop-on-containers",
+      "targets": {
+        "build": {
+          "executor": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/web-shopping",
+            "index": "apps/web-shopping/src/index.html",
+            "main": "apps/web-shopping/src/main.ts",
+            "polyfills": "apps/web-shopping/src/polyfills.ts",
+            "tsConfig": "apps/web-shopping/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/web-shopping/src/favicon.ico",
+              "apps/web-shopping/src/assets"
+            ],
+            "styles": ["apps/web-shopping/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-shopping/src/environments/environment.ts",
+                  "with": "apps/web-shopping/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "executor": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "web-shopping:build:production"
+            },
+            "development": {
+              "browserTarget": "web-shopping:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "executor": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "web-shopping:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/web-shopping/src/**/*.ts",
+              "apps/web-shopping/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/web-shopping"],
+          "options": {
+            "jestConfig": "apps/web-shopping/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
     }
   }
 }
