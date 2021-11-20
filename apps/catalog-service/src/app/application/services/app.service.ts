@@ -15,7 +15,7 @@ import { CatalogBrandRepository } from '../repositories/catalog-brand.repository
 import { CatalogItemRepository } from '../repositories/catalog-item.repository';
 import { CatalogTypeRepository } from '../repositories/catalog-type.repository';
 import { OutboxRepository } from '../repositories/outbox.repository';
-import { UnitOfWork } from '../repositories/unit-of-work';
+import { UnitOfWork } from '../services/unit-of-work';
 
 export class AppService {
   constructor(

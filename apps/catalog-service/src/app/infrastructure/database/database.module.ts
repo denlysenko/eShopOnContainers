@@ -10,10 +10,10 @@ import { CatalogBrandEntity } from './entities/catalog-brand.entity';
 import { CatalogItemEntity } from './entities/catalog-item.entity';
 import { CatalogTypeEntity } from './entities/catalog-type.entity';
 import { OutboxEntity } from './entities/outbox.entity';
-import { DbCatalogBrandRepository } from './repositories/db-catalog-brand.repository';
-import { DbCatalogItemRepository } from './repositories/db-catalog-item.repository';
-import { DbCatalogTypeRepository } from './repositories/db-catalog-type.repository';
-import { DbOutboxRepository } from './repositories/db-outbox.repository';
+import { TypeOrmCatalogBrandRepository } from './repositories/typeorm-catalog-brand.repository';
+import { TypeOrmCatalogItemRepository } from './repositories/typeorm-catalog-item.repository';
+import { TypeOrmCatalogTypeRepository } from './repositories/typeorm-catalog-type.repository';
+import { TypeOrmOutboxRepository } from './repositories/typeorm-outbox.repository';
 import { TypeOrmUnitOfWork } from './typeorm-unit-of-work';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,19 +21,19 @@ const providers: Provider<any>[] = [
   TypeOrmUnitOfWork,
   {
     provide: CATALOG_BRAND_REPOSITORY,
-    useClass: DbCatalogBrandRepository,
+    useClass: TypeOrmCatalogBrandRepository,
   },
   {
     provide: CATALOG_TYPE_REPOSITORY,
-    useClass: DbCatalogTypeRepository,
+    useClass: TypeOrmCatalogTypeRepository,
   },
   {
     provide: CATALOG_ITEM_REPOSITORY,
-    useClass: DbCatalogItemRepository,
+    useClass: TypeOrmCatalogItemRepository,
   },
   {
     provide: OUTBOX_REPOSITORY,
-    useClass: DbOutboxRepository,
+    useClass: TypeOrmOutboxRepository,
   },
 ];
 

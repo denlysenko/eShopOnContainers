@@ -1,4 +1,4 @@
-import { UnitOfWork } from '../../repositories/unit-of-work';
+import { UnitOfWork } from '../../services/unit-of-work';
 
 export const unitOfWorkMock: UnitOfWork = {
   withTransaction: jest.fn(),

@@ -4,7 +4,7 @@ import { CatalogTypeRepository } from '../../../application';
 import { CatalogType } from '../../../models';
 import { CatalogTypeEntity } from '../entities/catalog-type.entity';
 
-export class DbCatalogTypeRepository implements CatalogTypeRepository {
+export class TypeOrmCatalogTypeRepository implements CatalogTypeRepository {
   constructor(
     @InjectRepository(CatalogTypeEntity)
     private readonly _catalogTypeRepository: Repository<CatalogTypeEntity>

@@ -4,7 +4,7 @@ import { OutboxRepository } from '../../../application';
 import { Message } from '../../../models';
 import { OutboxEntity } from '../entities/outbox.entity';
 
-export class DbOutboxRepository implements OutboxRepository {
+export class TypeOrmOutboxRepository implements OutboxRepository {
   constructor(
     @InjectRepository(OutboxEntity)
     private readonly _outboxRepository: Repository<OutboxEntity>

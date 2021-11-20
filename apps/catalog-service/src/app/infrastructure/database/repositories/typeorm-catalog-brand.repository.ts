@@ -4,7 +4,7 @@ import { CatalogBrandRepository } from '../../../application';
 import { CatalogBrand } from '../../../models';
 import { CatalogBrandEntity } from '../entities/catalog-brand.entity';
 
-export class DbCatalogBrandRepository implements CatalogBrandRepository {
+export class TypeOrmCatalogBrandRepository implements CatalogBrandRepository {
   constructor(
     @InjectRepository(CatalogBrandEntity)
     private readonly _catalogBrandRepository: Repository<CatalogBrandEntity>

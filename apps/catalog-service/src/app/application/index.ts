@@ -14,6 +14,6 @@ export * from './repositories/catalog-brand.repository';
 export * from './repositories/catalog-item.repository';
 export * from './repositories/catalog-type.repository';
 export * from './repositories/outbox.repository';
-export * from './repositories/unit-of-work';
 export * from './services/app.service';
 export * from './services/outbox.service';
+export * from './services/unit-of-work';
