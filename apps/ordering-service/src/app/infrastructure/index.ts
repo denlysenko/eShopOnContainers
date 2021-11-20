@@ -6,7 +6,6 @@ export * from './consumers/order-stock-rejected.consumer';
 export * from './consumers/user-checkout-accepted.consumer';
 export * from './database/database.module';
 export * from './database/typeorm-unit-of-work';
-export * from './decorators/identity';
 export * from './filters/entity-not-found-exception.filter';
 export * from './guards/auth.guard';
 export * from './interceptors/http-logging.interceptor';

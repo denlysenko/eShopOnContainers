@@ -113,7 +113,7 @@ describe('Ordering service', () => {
         method: 'GET',
         path: '/v1/orders',
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -156,7 +156,7 @@ describe('Ordering service', () => {
         method: 'GET',
         path: `/v1/orders/${id}`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -172,7 +172,7 @@ describe('Ordering service', () => {
         method: 'GET',
         path: `/v1/orders/${order.id}`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -233,7 +233,7 @@ describe('Ordering service', () => {
         method: 'PUT',
         path: `/v1/orders/${id}/cancel`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -249,7 +249,7 @@ describe('Ordering service', () => {
         method: 'PUT',
         path: `/v1/orders/${order.id}/cancel`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -276,7 +276,7 @@ describe('Ordering service', () => {
         method: 'PUT',
         path: `/v1/orders/${order.id}/cancel`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -308,7 +308,7 @@ describe('Ordering service', () => {
         method: 'PUT',
         path: `/v1/orders/${id}/ship`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -333,7 +333,7 @@ describe('Ordering service', () => {
         method: 'PUT',
         path: `/v1/orders/${order.id}/ship`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -351,7 +351,7 @@ describe('Ordering service', () => {
         method: 'PUT',
         path: `/v1/orders/${order.id}/ship`,
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -381,7 +381,7 @@ describe('Ordering service', () => {
         method: 'POST',
         path: '/v1/orders/draft',
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
         payload: [],
       });
@@ -398,7 +398,7 @@ describe('Ordering service', () => {
         method: 'POST',
         path: '/v1/orders/draft',
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
         payload: [
           {
@@ -423,7 +423,7 @@ describe('Ordering service', () => {
         method: 'POST',
         path: '/v1/orders/draft',
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
         payload: [
           {
@@ -471,7 +471,7 @@ describe('Ordering service', () => {
         method: 'GET',
         path: '/v1/orders/card-types',
         headers: {
-          Authorization: accessToken,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 

@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 export const Identity = createParamDecorator(
@@ -8,7 +12,7 @@ export const Identity = createParamDecorator(
     ];
 
     if (!authorization.startsWith('Bearer ')) {
-      throw new Error('Malformed authorization token');
+      throw new UnauthorizedException();
     }
 
     const token = authorization.split('Bearer ')[1];

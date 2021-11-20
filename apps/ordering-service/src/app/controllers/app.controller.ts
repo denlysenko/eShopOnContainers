@@ -29,7 +29,8 @@ import {
 import { OrderDraftDto } from '../application/dto/order-draft.dto';
 import { BasketItemMapper } from '../application/mappers/basket-item.mapper';
 import { exceptionFactory } from '../exception.factory';
-import { AuthGuard, Identity } from '../infrastructure';
+import { AuthGuard } from '../infrastructure';
+import { Identity } from './decorators/identity';
 
 @Controller('v1/orders')
 @UseGuards(AuthGuard)
