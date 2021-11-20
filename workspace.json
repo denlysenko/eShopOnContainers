@@ -323,6 +323,58 @@
         }
       },
       "tags": []
+    },
+    "web-shopping-bff": {
+      "root": "apps/web-shopping-bff",
+      "sourceRoot": "apps/web-shopping-bff/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/web-shopping-bff",
+            "main": "apps/web-shopping-bff/src/main.ts",
+            "tsConfig": "apps/web-shopping-bff/tsconfig.app.json",
+            "assets": ["apps/web-shopping-bff/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-shopping-bff/src/environments/environment.ts",
+                  "with": "apps/web-shopping-bff/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "web-shopping-bff:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/web-shopping-bff/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/web-shopping-bff"],
+          "options": {
+            "jestConfig": "apps/web-shopping-bff/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
     }
   }
 }
