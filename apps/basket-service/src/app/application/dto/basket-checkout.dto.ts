@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsCreditCard, IsNotEmpty } from 'class-validator';
 
 export class BasketCheckoutDto {
   @ApiProperty({ required: true })
@@ -24,6 +24,7 @@ export class BasketCheckoutDto {
 
   @ApiProperty({ required: true })
   @IsNotEmpty({ message: 'cardNumber is required' })
+  @IsCreditCard({ message: 'cardNumber is invalid' })
   public readonly cardNumber: string;
 
   @ApiProperty({ required: true })

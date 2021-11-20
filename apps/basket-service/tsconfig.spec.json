@@ -8,6 +8,7 @@
   "include": [
     "**/*.test.ts",
     "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
     "**/*.mock.ts",
     "**/*.d.ts"
   ]

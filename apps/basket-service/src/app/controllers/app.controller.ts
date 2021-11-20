@@ -16,6 +16,7 @@ import {
   CustomerBasketReadDto,
   ValidationErrorDto,
 } from '../application';
+import { exceptionFactory } from '../exception.factory';
 import { Identity } from './decorators/identity';
 
 @Controller('v1/basket')
@@ -31,6 +32,10 @@ export class AppController {
     description: 'Found record',
     type: CustomerBasketReadDto,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Authentication Error',
+  })
   getBasketById(
     @Identity() customerId: string
   ): Promise<CustomerBasketReadDto> {
@@ -44,8 +49,12 @@ export class AppController {
   @ApiOAuth2([])
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Created/update record',
+    description: 'Created/updated record',
     type: CustomerBasketReadDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Authentication Error',
   })
   @ApiResponse({
     status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -54,7 +63,7 @@ export class AppController {
   })
   updateBasket(
     @Identity() customerId: string,
-    @Body(new ParseArrayPipe({ items: BasketItemCreateDto }))
+    @Body(new ParseArrayPipe({ items: BasketItemCreateDto, exceptionFactory }))
     basketItemsDto: BasketItemCreateDto[]
   ): Promise<CustomerBasketReadDto> {
     return this._appService.updateBasket(customerId, basketItemsDto);
@@ -72,6 +81,10 @@ export class AppController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Not Found Error',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Authentication Error',
   })
   @ApiResponse({
     status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -96,6 +109,10 @@ export class AppController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Not Found Error',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Authentication Error',
   })
   deleteBasket(@Identity() customerId: string): Promise<void> {
     return this._appService.deleteBasket(customerId);

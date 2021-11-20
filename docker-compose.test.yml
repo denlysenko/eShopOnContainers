@@ -20,6 +20,16 @@ services:
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
     depends_on:
       - postgres
+  
+  basket-service-tests:
+    build:
+      context: .
+      dockerfile: ./apps/basket-service/docker/test-app/Dockerfile
+    environment:
+      - PG_CONNECTION_STRING=postgres://${PG_BASKET_USER}:${PG_BASKET_PASSWORD}@postgres/basket-db-test
+      - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+    depends_on:
+      - postgres
 
   postgres:
     container_name: postgres
@@ -28,8 +38,8 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}|${PG_ORDERING_USER}:${PG_ORDERING_PASSWORD}
-      - POSTGRES_DATABASES=catalog-db-test:${PG_CATALOG_USER}|ordering-db-test:${PG_ORDERING_USER}
+      - POSTGRES_USERS=${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}|${PG_ORDERING_USER}:${PG_ORDERING_PASSWORD}|${PG_BASKET_USER}:${PG_BASKET_PASSWORD}
+      - POSTGRES_DATABASES=catalog-db-test:${PG_CATALOG_USER}|ordering-db-test:${PG_ORDERING_USER}|basket-db-test:${PG_BASKET_USER}
 
   rabbitmq:
     container_name: rabbitmq
