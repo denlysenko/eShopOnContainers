@@ -8,7 +8,7 @@ import {
   ParseArrayPipe,
   Post,
 } from '@nestjs/common';
-import { ApiOAuth2, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOAuth2, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   AppService,
   BasketCheckoutDto,
@@ -20,6 +20,7 @@ import { exceptionFactory } from '../exception.factory';
 import { Identity } from './decorators/identity';
 
 @Controller('v1/basket')
+@ApiTags('Customer Basket')
 export class AppController {
   constructor(private readonly _appService: AppService) {}
 

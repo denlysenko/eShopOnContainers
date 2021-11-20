@@ -11,6 +11,7 @@ services:
       - '3000:3000'
     depends_on:
       - postgres
+      - rabbitmq
       - catalog-db-migrate
 
   ordering-service:
@@ -23,6 +24,7 @@ services:
       - '3001:3000'
     depends_on:
       - postgres
+      - rabbitmq
       - ordering-db-migrate
 
   identity-service:
@@ -53,6 +55,7 @@ services:
       - '3003:3000'
     depends_on:
       - postgres
+      - rabbitmq
       - basket-db-migrate
 
   postgres:
