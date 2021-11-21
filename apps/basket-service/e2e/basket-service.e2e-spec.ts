@@ -86,7 +86,7 @@ describe('Basket service', () => {
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    it('returns null if basket not found', async () => {
+    it('returns empty array if basket not found', async () => {
       const response = await app.inject({
         method: 'GET',
         path: '/v1/basket',
@@ -99,7 +99,7 @@ describe('Basket service', () => {
 
       const body = JSON.parse(response.body);
 
-      expect(body).toBeNull();
+      expect(body).toEqual({ buyerId: notExistsId, basketItems: [] });
     });
 
     it('returns customer basket', async () => {

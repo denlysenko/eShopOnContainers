@@ -31,12 +31,15 @@ describe('AppService', () => {
         .mockResolvedValue(basketMock);
     });
 
-    it('returns null if basket not found', async () => {
+    it('returns empty array if basket not found', async () => {
       jest
         .spyOn(basketRepositoryMock, 'getBasket')
         .mockResolvedValueOnce(undefined);
 
-      expect(await service.getBasketById(customerId)).toBeNull();
+      expect(await service.getBasketById(customerId)).toEqual({
+        buyerId: customerId,
+        basketItems: [],
+      });
     });
 
     it('returns basket', async () => {

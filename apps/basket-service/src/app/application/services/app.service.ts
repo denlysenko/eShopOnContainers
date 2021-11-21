@@ -18,10 +18,10 @@ export class AppService {
   ) {}
 
   async getBasketById(customerId: string): Promise<CustomerBasketReadDto> {
-    const basket = await this._basketRepository.getBasket(customerId);
+    let basket = await this._basketRepository.getBasket(customerId);
 
     if (!basket) {
-      return null;
+      basket = new CustomerBasket(customerId, []);
     }
 
     return BasketMapper.toDto(basket);
