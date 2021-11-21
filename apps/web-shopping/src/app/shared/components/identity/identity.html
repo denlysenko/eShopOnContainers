@@ -11,7 +11,7 @@
   <section class="esh-identity-section"
            *ngIf="(isAuthenticated$ | async) === true">
 
-    <div class="esh-identity-name">{{(userData$ | async)?.userData.name}}</div>
+    <div class="esh-identity-name">{{(userData$ | async)?.userData?.name}}</div>
     <img class="esh-identity-image"
          src="assets/images/arrow-down.png">
   </section>
