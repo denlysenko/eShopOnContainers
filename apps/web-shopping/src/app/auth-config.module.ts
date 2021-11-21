@@ -13,6 +13,8 @@ import { AuthModule, LogLevel } from 'angular-auth-oidc-client';
         responseType: 'code',
         silentRenew: true,
         useRefreshToken: true,
+        renewTimeBeforeTokenExpiresInSeconds: 120,
+        ignoreNonceAfterRefresh: true,
         logLevel: LogLevel.Debug,
       },
     }),
