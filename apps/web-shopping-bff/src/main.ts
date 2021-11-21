@@ -1,20 +1,62 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3333;
-  await app.listen(port, () => {
-    Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter()
+  );
+
+  app.setGlobalPrefix('api');
+
+  const port = process.env.PORT || 3000;
+  const host = process.env.HOST || 'localhost';
+
+  const config = new DocumentBuilder()
+    .setVersion('v1')
+    .setTitle('eShopOnContainers - Web Shopping API Gateway')
+    .setDescription('Web Shopping API Gateway')
+    .addOAuth2({
+      type: 'oauth2',
+      flows: {
+        implicit: {
+          authorizationUrl:
+            'http://localhost:4000/auth/realms/e-shop-on-containers/protocol/openid-connect/auth',
+          scopes: {
+            openid: 'openid',
+          },
+        },
+      },
+    })
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('/swagger/v1', app, document, {
+    initOAuth: {
+      clientId: 'api_swagger',
+      additionalQueryStringParams: { nonce: '325qjlalf09230' },
+    },
+  });
+
+  await app.listen(port, host, (err, address) => {
+    if (err) {
+      Logger.error(err);
+
+      return;
+    }
+
+    Logger.log(`Listening at ${address}`);
   });
 }
 
