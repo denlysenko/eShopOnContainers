@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AuthModule, LogLevel } from 'angular-auth-oidc-client';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule, LogLevel } from 'angular-auth-oidc-client';
         useRefreshToken: true,
         renewTimeBeforeTokenExpiresInSeconds: 120,
         ignoreNonceAfterRefresh: true,
+        secureRoutes: [environment.apiUrl],
         logLevel: LogLevel.Debug,
       },
     }),
