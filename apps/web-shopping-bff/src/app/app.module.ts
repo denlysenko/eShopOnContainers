@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
+import { BasketModule } from './basket/basket.module';
+import { HttpModule } from './http/http.module';
 
 @Module({
-  imports: [],
+  imports: [HttpModule, BasketModule],
   controllers: [],
   providers: [],
 })

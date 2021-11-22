@@ -336,7 +336,8 @@
             "outputPath": "dist/apps/web-shopping-bff",
             "main": "apps/web-shopping-bff/src/main.ts",
             "tsConfig": "apps/web-shopping-bff/tsconfig.app.json",
-            "assets": ["apps/web-shopping-bff/src/assets"]
+            "assets": ["apps/web-shopping-bff/src/assets"],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {

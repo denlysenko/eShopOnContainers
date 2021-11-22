@@ -33,7 +33,6 @@ services:
     env_file: .env
     ports:
       - '4000:8080'
-      - '3002:8080'
     environment:
       - DB_VENDOR=postgres
       - DB_ADDR=postgres:5432
@@ -57,6 +56,20 @@ services:
       - postgres
       - rabbitmq
       - basket-db-migrate
+  
+  web-shopping-bff:
+    build:
+      context: .
+      dockerfile: ./apps/web-shopping-bff/docker/build-app/Dockerfile
+    environment:
+      - KEYKLOAK_FRONTEND_HOST=localhost:4000
+      - RESOURCE_SERVER_URL=http://identity-service:8080/auth/realms/e-shop-on-containers
+      - WEB_SHOPPING_URL=http://localhost:4200
+      - BASKET_URL=http://basket-service:3000
+    ports:
+      - '3004:3000'
+    depends_on:
+      - basket-service
 
   postgres:
     container_name: postgres

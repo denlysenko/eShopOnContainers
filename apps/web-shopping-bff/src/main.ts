@@ -10,6 +10,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
+import { HttpLoggingInterceptor } from './app/interceptors/http-logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,6 +19,10 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('api');
+  app.enableCors({
+    origin: [process.env.WEB_SHOPPING_URL],
+  });
+  app.useGlobalInterceptors(new HttpLoggingInterceptor());
 
   const port = process.env.PORT || 3000;
   const host = process.env.HOST || 'localhost';
@@ -30,8 +35,7 @@ async function bootstrap() {
       type: 'oauth2',
       flows: {
         implicit: {
-          authorizationUrl:
-            'http://localhost:4000/auth/realms/e-shop-on-containers/protocol/openid-connect/auth',
+          authorizationUrl: `http://${process.env.KEYKLOAK_FRONTEND_HOST}/auth/realms/e-shop-on-containers/protocol/openid-connect/auth`,
           scopes: {
             openid: 'openid',
           },
