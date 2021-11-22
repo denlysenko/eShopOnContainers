@@ -66,6 +66,7 @@ services:
       - RESOURCE_SERVER_URL=http://identity-service:8080/auth/realms/e-shop-on-containers
       - WEB_SHOPPING_URL=http://localhost:4200
       - BASKET_URL=http://basket-service:3000
+      - CATALOG_URL=http://catalog-service:3000
     ports:
       - '3004:3000'
     depends_on:
