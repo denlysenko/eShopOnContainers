@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BasketStatusComponent } from './components/basket-status/basket-status.component';
 import { Identity } from './components/identity/identity';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { Pager } from './components/pager/pager';
 import { UppercasePipe } from './pipes/uppercase.pipe';
 import { BasketSharedService } from './services/basket-shared.service';
 
@@ -24,6 +25,7 @@ import { BasketSharedService } from './services/basket-shared.service';
     Identity,
     PageNotFoundComponent,
     BasketStatusComponent,
+    Pager,
     UppercasePipe,
   ],
   exports: [
@@ -35,6 +37,7 @@ import { BasketSharedService } from './services/basket-shared.service';
     Identity,
     PageNotFoundComponent,
     BasketStatusComponent,
+    Pager,
     UppercasePipe,
   ],
 })

@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { AuthInterceptor } from 'angular-auth-oidc-client';
 import { AppComponent } from './app.component';
 import { AuthConfigModule } from './auth-config.module';
+import { CatalogComponent } from './catalog/catalog.component';
+import { CatalogModule } from './catalog/catalog.module';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { SharedModule } from './shared/shared.module';
 
@@ -12,11 +14,19 @@ import { SharedModule } from './shared/shared.module';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([{ path: '**', component: PageNotFoundComponent }], {
-      initialNavigation: 'enabledBlocking',
-    }),
+    RouterModule.forRoot(
+      [
+        { path: '', redirectTo: 'catalog', pathMatch: 'full' },
+        { path: 'catalog', component: CatalogComponent },
+        { path: '**', component: PageNotFoundComponent },
+      ],
+      {
+        initialNavigation: 'enabledBlocking',
+      }
+    ),
     AuthConfigModule,
     SharedModule.forRoot(),
+    CatalogModule,
   ],
   providers: [
     {
