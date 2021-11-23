@@ -92,6 +92,23 @@ export class CatalogService {
     return response;
   }
 
+  async getItemsByTypeId(
+    catalogTypeId: number,
+    pageSize: number,
+    pageIndex: number
+  ): Promise<CatalogItemsReadDto> {
+    const result = await this._httpService.get(
+      `${this._baseUrl}/catalog/items/type/${catalogTypeId}/brand/all?pageSize=${pageSize}&pageIndex=${pageIndex}`
+    );
+    const response = await result.body.json();
+
+    if (result.statusCode !== HttpStatus.OK) {
+      throw new HttpException(response, result.statusCode);
+    }
+
+    return response;
+  }
+
   async getCatalogTypes(): Promise<CatalogTypeReadDto[]> {
     const result = await this._httpService.get(
       `${this._baseUrl}/catalog/catalog-types`
