@@ -1,9 +1,9 @@
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { Test } from '@nestjs/testing';
 import { Connection } from 'typeorm';
 import { AppModule } from '../src/app/app.module';
 import { DEFAULT_PAGE_SIZE } from '../src/app/application';
@@ -13,12 +13,12 @@ import {
   EntityNotFoundExceptionFilter,
   MessageProcessor,
 } from '../src/app/infrastructure';
-import { seedCatalogTypes } from './seeders/seed-catalog-types';
-import { seedCatalogBrands } from './seeders/seed-catalog-brands';
-import { seedCatalogItems } from './seeders/seed-catalog-items';
+import { catalogBrands } from './fixtures/catalog-brands';
 import { catalogItems } from './fixtures/catalog-items';
 import { catalogTypes } from './fixtures/catalog-types';
-import { catalogBrands } from './fixtures/catalog-brands';
+import { seedCatalogBrands } from './seeders/seed-catalog-brands';
+import { seedCatalogItems } from './seeders/seed-catalog-items';
+import { seedCatalogTypes } from './seeders/seed-catalog-types';
 
 describe('Catalog service', () => {
   let app: NestFastifyApplication;
@@ -556,6 +556,123 @@ describe('Catalog service', () => {
         restockThreshold: 0,
         maxStockThreshold: 0,
         onReorder: true,
+      });
+    });
+
+    it('returns empty array if catalog type not exists', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        path: '/v1/catalog/items/type/all/brand/100',
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.OK);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.count).toBe(0);
+      expect(body.data).toHaveLength(0);
+    });
+  });
+
+  describe('/GET v1/catalog/items/type/:catalogTypeId/brand/all', () => {
+    it('without query params', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all`,
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.OK);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.pageIndex).toBe(0);
+      expect(body.pageSize).toBe(DEFAULT_PAGE_SIZE);
+      expect(body.count).toBe(3);
+      expect(body.data).toHaveLength(3);
+    });
+
+    it('with pageIndex query param', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageIndex=1`,
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.OK);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.pageIndex).toBe(1);
+      expect(body.pageSize).toBe(DEFAULT_PAGE_SIZE);
+      expect(body.count).toBe(3);
+      expect(body.data).toHaveLength(0);
+    });
+
+    it('with pageSize query param', async () => {
+      const pageSize = 15;
+
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageSize=${pageSize}`,
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.OK);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.pageIndex).toBe(0);
+      expect(body.pageSize).toBe(pageSize);
+      expect(body.count).toBe(3);
+      expect(body.data).toHaveLength(3);
+    });
+
+    it('with pageSize and pageIndex query params', async () => {
+      const pageSize = 3;
+      const pageIndex = 1;
+
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.OK);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.pageIndex).toBe(pageIndex);
+      expect(body.pageSize).toBe(pageSize);
+      expect(body.count).toBe(3);
+      expect(body.data).toHaveLength(0);
+    });
+
+    it('returns transformed records', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all`,
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.OK);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.data[0]).toEqual({
+        id: 9,
+        name: 'Cup<T> White Mu',
+        description: 'Cup<T> White Mu',
+        price: 12,
+        pictureFileName: '9.png',
+        pictureUri: '',
+        catalogType: {
+          id: 1,
+          type: 'Mug',
+        },
+        catalogBrand: {
+          id: 5,
+          brand: 'Other',
+        },
+        availableStock: 76,
+        restockThreshold: 0,
+        maxStockThreshold: 0,
+        onReorder: false,
       });
     });
 

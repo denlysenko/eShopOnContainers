@@ -20,6 +20,11 @@ export interface CatalogItemRepository {
     skip: number,
     take: number
   ): Promise<[CatalogItem[], number]>;
+  findAllByType(
+    catalogTypeId: number,
+    skip: number,
+    take: number
+  ): Promise<[CatalogItem[], number]>;
   update(id: number, catalogItem: Partial<CatalogItem>): Promise<void>;
   create(
     catalogItem: Omit<CatalogItem, 'id' | 'catalogBrand' | 'catalogType'>

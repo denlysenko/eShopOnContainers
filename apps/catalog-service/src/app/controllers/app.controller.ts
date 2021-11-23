@@ -210,6 +210,41 @@ export class AppController {
     );
   }
 
+  // GET api/v1/catalog/items/type/{catalogTypeId}/brand/all[?pageSize=3&pageIndex=10]
+  @Get('items/type/:catalogTypeId/brand/all')
+  @ApiTags('Catalog Items')
+  @ApiOperation({ summary: 'Get catalog items by type id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Found records',
+    type: CatalogItemsReadDto,
+  })
+  @ApiParam({
+    name: 'catalogTypeId',
+    description: 'Catalog type id',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    description: 'pageSize',
+    type: Number,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'pageIndex',
+    description: 'pageIndex',
+    type: Number,
+    required: false,
+  })
+  getItemsByTypeId(
+    @Param('catalogTypeId', ParseIntPipe) catalogTypeId: number,
+    @Query('pageSize', new DefaultValuePipe(DEFAULT_PAGE_SIZE), ParseIntPipe)
+    pageSize: number,
+    @Query('pageIndex', new DefaultValuePipe(0), ParseIntPipe) pageIndex: number
+  ): Promise<CatalogItemsReadDto> {
+    return this.appService.getItemsByTypeId(catalogTypeId, pageSize, pageIndex);
+  }
+
   // PATCH api/v1/catalog/items/{catalogItemId}
   @Patch('items/:id')
   @ApiTags('Catalog Items')

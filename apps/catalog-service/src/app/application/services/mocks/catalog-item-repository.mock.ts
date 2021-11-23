@@ -7,6 +7,7 @@ export const catalogItemRepositoryMock: CatalogItemRepository = {
   findAllByName: jest.fn(),
   findAllByTypeAndBrand: jest.fn(),
   findAllByBrand: jest.fn(),
+  findAllByType: jest.fn(),
   update: jest.fn(),
   create: jest.fn(),
   delete: jest.fn(),

@@ -113,6 +113,25 @@ export class AppService {
     });
   }
 
+  async getItemsByTypeId(
+    catalogTypeId: number,
+    pageSize: number,
+    pageIndex: number
+  ): Promise<CatalogItemsReadDto> {
+    const [data, count] = await this._catalogItemRepository.findAllByType(
+      catalogTypeId,
+      pageSize * pageIndex,
+      pageSize
+    );
+
+    return CatalogItemMapper.toReadItemsDto({
+      pageIndex,
+      pageSize,
+      count,
+      data,
+    });
+  }
+
   async updateCatalogItem(
     id: number,
     updateCatalogItemDto: CatalogItemUpdateDto

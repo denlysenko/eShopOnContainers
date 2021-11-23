@@ -116,6 +116,30 @@ export class TypeOrmCatalogItemRepository implements CatalogItemRepository {
     return [data, count];
   }
 
+  async findAllByType(
+    catalogTypeId: number,
+    skip: number,
+    take: number
+  ): Promise<[CatalogItem[], number]> {
+    const queryBuilder =
+      this._catalogItemRepository.createQueryBuilder('catalogItem');
+
+    const count = await queryBuilder
+      .where('catalogItem.catalogTypeId = :catalogTypeId', { catalogTypeId })
+      .getCount();
+
+    const data = await queryBuilder
+      .where('catalogItem.catalogTypeId = :catalogTypeId', { catalogTypeId })
+      .leftJoinAndSelect('catalogItem.catalogType', 'catalogType')
+      .leftJoinAndSelect('catalogItem.catalogBrand', 'catalogBrand')
+      .orderBy('catalogItem.name', 'ASC')
+      .skip(skip)
+      .take(take)
+      .getMany();
+
+    return [data, count];
+  }
+
   async update(id: number, catalogItem: Partial<CatalogItem>): Promise<void> {
     await this._catalogItemRepository.update(id, catalogItem);
   }

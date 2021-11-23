@@ -1,13 +1,13 @@
 import 'reflect-metadata';
+import { EntityNotFoundException } from '../exceptions/entity-not-found.exception';
 import { AppService } from './app.service';
 import { catalogBrandRepositoryMock } from './mocks/catalog-brand-repository.mock';
 import { catalogBrandMock } from './mocks/catalog-brand.mock';
-import { catalogTypeRepositoryMock } from './mocks/catalog-type-repository.mock';
-import { catalogItemMock } from './mocks/catalog-item.mock';
 import { catalogItemRepositoryMock } from './mocks/catalog-item-repository.mock';
-import { outboxRepositoryMock } from './mocks/outbox-repository.mock';
+import { catalogItemMock } from './mocks/catalog-item.mock';
+import { catalogTypeRepositoryMock } from './mocks/catalog-type-repository.mock';
 import { catalogTypeMock } from './mocks/catalog-type.mock';
-import { EntityNotFoundException } from '../exceptions/entity-not-found.exception';
+import { outboxRepositoryMock } from './mocks/outbox-repository.mock';
 import { unitOfWorkMock } from './mocks/unit-of-work.mock';
 
 describe('AppService', () => {
@@ -204,6 +204,44 @@ describe('AppService', () => {
 
     it('should transform to CatalogReadDTO', async () => {
       const catalogReadDto = await service.getItemsByBrandId(
+        catalogBrandMock.id,
+        pageSize,
+        pageIndex
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { catalogBrandId: _, catalogTypeId: __, ...rest } = catalogItemMock;
+
+      expect(catalogReadDto).toEqual({
+        pageIndex,
+        pageSize,
+        count: 1,
+        data: [rest],
+      });
+    });
+  });
+
+  describe('getItemsByTypeId', () => {
+    const pageSize = 15;
+    const pageIndex = 2;
+
+    beforeEach(() => {
+      jest
+        .spyOn(catalogItemRepositoryMock, 'findAllByType')
+        .mockResolvedValue([[catalogItemMock], 1]);
+    });
+
+    it('should call findAndCount with correct params', async () => {
+      await service.getItemsByTypeId(catalogTypeMock.id, pageSize, pageIndex);
+
+      expect(catalogItemRepositoryMock.findAllByType).toHaveBeenCalledWith(
+        catalogTypeMock.id,
+        pageSize * pageIndex,
+        pageSize
+      );
+    });
+
+    it('should transform to CatalogReadDTO', async () => {
+      const catalogReadDto = await service.getItemsByTypeId(
         catalogBrandMock.id,
         pageSize,
         pageIndex
