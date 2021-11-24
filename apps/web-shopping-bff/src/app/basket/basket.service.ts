@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpService } from '../http';
+import { BasketItemCreateDto } from './dto/basket-item-create.dto';
 import { BasketReadDto } from './dto/basket-read.dto';
 
 @Injectable()
@@ -24,13 +25,17 @@ export class BasketService {
     return response;
   }
 
-  async updateBasket(token, basketItemsDto): Promise<BasketReadDto> {
+  async updateBasket(
+    token: string,
+    basketItemsDto: BasketItemCreateDto[]
+  ): Promise<BasketReadDto> {
     const result = await this._httpService.post(
       `${this._baseUrl}/basket`,
       JSON.stringify(basketItemsDto),
       {
         headers: {
           authorization: token,
+          'content-type': 'application/json',
         },
       }
     );
