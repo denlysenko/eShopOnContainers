@@ -67,6 +67,7 @@ services:
       - WEB_SHOPPING_URL=http://localhost:4200
       - BASKET_URL=http://basket-service:3000
       - CATALOG_URL=http://catalog-service:3000
+      - ORDERING_URL=http://ordering-service:3000
     ports:
       - '3004:3000'
     depends_on:
