@@ -8,7 +8,13 @@ import {
   ParseArrayPipe,
   Post,
 } from '@nestjs/common';
-import { ApiOAuth2, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOAuth2,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   AppService,
   BasketCheckoutDto,
@@ -48,6 +54,10 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Creates/updates customer basket' })
   @ApiOAuth2([])
+  @ApiBody({
+    type: BasketItemCreateDto,
+    isArray: true,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Created/updated record',
