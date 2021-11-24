@@ -23,4 +23,24 @@ export class BasketService {
 
     return response;
   }
+
+  async updateBasket(token, basketItemsDto): Promise<BasketReadDto> {
+    const result = await this._httpService.post(
+      `${this._baseUrl}/basket`,
+      JSON.stringify(basketItemsDto),
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
+
+    const response = await result.body.json();
+
+    if (result.statusCode !== HttpStatus.OK) {
+      throw new HttpException(response, result.statusCode);
+    }
+
+    return response;
+  }
 }
