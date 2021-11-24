@@ -18,6 +18,11 @@ import { SharedModule } from './shared/shared.module';
       [
         { path: '', redirectTo: 'catalog', pathMatch: 'full' },
         { path: 'catalog', component: CatalogComponent },
+        {
+          path: 'basket',
+          loadChildren: () =>
+            import('./basket/basket.module').then((m) => m.BasketModule),
+        },
         { path: '**', component: PageNotFoundComponent },
       ],
       {

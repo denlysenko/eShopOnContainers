@@ -12,6 +12,7 @@ import {
   throwError,
 } from 'rxjs';
 import { IPager } from '../shared/models/pager.model';
+import { BasketSharedService } from '../shared/services/basket-shared.service';
 import { CatalogService } from './catalog.service';
 import { ICatalogBrand } from './models/catalog-brand.model';
 import { ICatalogItem } from './models/catalog-item.model';
@@ -100,7 +101,7 @@ export class CatalogComponent {
 
   constructor(
     private readonly _catalogService: CatalogService,
-    // private basketService: BasketWrapperService,
+    private readonly _basketService: BasketSharedService,
     private readonly _oidcSecurityService: OidcSecurityService
   ) {}
 
@@ -138,7 +139,7 @@ export class CatalogComponent {
   }
 
   addToCart(item: ICatalogItem) {
-    // this.basketService.addItemToBasket(item);
+    this._basketService.addItemToBasket(item);
   }
 
   private handleError(error: any) {

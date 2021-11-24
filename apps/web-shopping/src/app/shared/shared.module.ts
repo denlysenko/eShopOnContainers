@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BasketStatusComponent } from './components/basket-status/basket-status.component';
+import { Header } from './components/header/header';
 import { Identity } from './components/identity/identity';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { Pager } from './components/pager/pager';
@@ -26,6 +27,7 @@ import { BasketSharedService } from './services/basket-shared.service';
     PageNotFoundComponent,
     BasketStatusComponent,
     Pager,
+    Header,
     UppercasePipe,
   ],
   exports: [
@@ -38,6 +40,7 @@ import { BasketSharedService } from './services/basket-shared.service';
     PageNotFoundComponent,
     BasketStatusComponent,
     Pager,
+    Header,
     UppercasePipe,
   ],
 })
