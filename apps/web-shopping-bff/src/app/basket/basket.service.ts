@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpService } from '../http';
+import { BasketCheckoutDto } from './dto/basket-checkout.dto';
 import { BasketItemCreateDto } from './dto/basket-item-create.dto';
 import { BasketReadDto } from './dto/basket-read.dto';
 
@@ -47,5 +48,27 @@ export class BasketService {
     }
 
     return response;
+  }
+
+  async checkout(
+    token: string,
+    basketCheckoutDto: BasketCheckoutDto
+  ): Promise<void> {
+    const result = await this._httpService.post(
+      `${this._baseUrl}/basket/checkout`,
+      JSON.stringify(basketCheckoutDto),
+      {
+        headers: {
+          authorization: token,
+          'content-type': 'application/json',
+        },
+      }
+    );
+
+    if (result.statusCode !== HttpStatus.OK) {
+      const response = await result.body.json();
+
+      throw new HttpException(response, result.statusCode);
+    }
   }
 }

@@ -20,6 +20,7 @@ import {
 import { exceptionFactory } from '../../exception.factory';
 import { AuthGuard } from '../common';
 import { BasketService } from './basket.service';
+import { BasketCheckoutDto } from './dto/basket-checkout.dto';
 import { BasketItemCreateDto } from './dto/basket-item-create.dto';
 import { BasketReadDto } from './dto/basket-read.dto';
 import { ValidationErrorDto } from './dto/validation-error.dto';
@@ -86,5 +87,34 @@ export class BasketController {
     basketItemsDto: BasketItemCreateDto[]
   ): Promise<BasketReadDto> {
     return this._basketService.updateBasket(token, basketItemsDto);
+  }
+
+  // POST api/v1/basket/checkout
+  @Post('checkout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Checkout customer order' })
+  @ApiOAuth2([])
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Order checked out',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not Found Error',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Authentication Error',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Validation Error',
+    type: ValidationErrorDto,
+  })
+  checkout(
+    @Headers('Authorization') token: string,
+    @Body() basketCheckoutDto: BasketCheckoutDto
+  ): Promise<void> {
+    return this._basketService.checkout(token, basketCheckoutDto);
   }
 }
