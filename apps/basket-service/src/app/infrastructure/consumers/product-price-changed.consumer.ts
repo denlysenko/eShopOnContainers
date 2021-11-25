@@ -1,6 +1,6 @@
 import { ILogger, LOGGER } from '@e-shop-on-containers/logger';
-import { Controller, Inject } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   BasketRepository,
   BASKET_REPOSITORY,
@@ -9,7 +9,7 @@ import {
   ProductPriceChangedEvent,
 } from '../../application';
 
-@Controller()
+@Injectable()
 export class ProductPriceChangedConsumer {
   constructor(
     @Inject(INBOX_REPOSITORY)
@@ -19,19 +19,17 @@ export class ProductPriceChangedConsumer {
     private readonly _basketRepository: BasketRepository
   ) {}
 
-  @EventPattern(ProductPriceChangedEvent.name)
-  async handle(
-    @Payload() event: ProductPriceChangedEvent,
-    @Ctx() context: RmqContext
-  ): Promise<void> {
+  @RabbitSubscribe({
+    exchange: process.env.EXCHANGE,
+    routingKey: ProductPriceChangedEvent.name,
+  })
+  async handle(event: ProductPriceChangedEvent): Promise<void | Nack> {
     this._logger.debug(
       `-- Handling integration event: ${
         event.id
       } at BasketService - (${JSON.stringify(event)})`
     );
 
-    const channel = context.getChannelRef();
-    const originalMsg = context.getMessage();
     const processed = await this._inboxRepository.exists(event.id);
 
     if (processed) {
@@ -40,8 +38,6 @@ export class ProductPriceChangedConsumer {
           event
         )}) was already processed`
       );
-
-      channel.ack(originalMsg);
 
       return;
     }
@@ -55,10 +51,10 @@ export class ProductPriceChangedConsumer {
         ),
         this._inboxRepository.create(event.id),
       ]);
-
-      channel.ack(originalMsg);
     } catch (error) {
       this._logger.error(`-- Updating product price failed. Error: ${error}`);
+
+      return new Nack(true);
     }
   }
 }

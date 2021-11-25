@@ -4,15 +4,17 @@ dotenv.config();
 
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule, eventBusConnection, queue } from './app/app.module';
+import { AppModule } from './app/app.module';
 import { exceptionFactory } from './app/exception.factory';
-import { EntityNotFoundExceptionFilter, HttpLoggingInterceptor } from './app/infrastructure';
+import {
+  EntityNotFoundExceptionFilter,
+  HttpLoggingInterceptor,
+} from './app/infrastructure';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -56,20 +58,6 @@ async function bootstrap() {
       additionalQueryStringParams: { nonce: '325qjlalf09230' },
     },
   });
-
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.RMQ,
-    options: {
-      urls: [eventBusConnection],
-      queue,
-      noAck: false,
-      queueOptions: {
-        durable: false,
-      },
-    },
-  });
-
-  await app.startAllMicroservices();
 
   await app.listen(port, host, (err, address) => {
     if (err) {

@@ -40,7 +40,7 @@ export class CreateOrderCommandHandler
         cardTypeId: command.cardTypeId,
         cardNumber: command.cardNumber,
         cardSecurityNumber: command.cardSecurityNumber,
-        cardHolderName: command.cardNumber,
+        cardHolderName: command.cardHolderName,
         cardExpiration: command.cardExpiration,
         userId: command.userId,
         userName: command.userName,
@@ -74,7 +74,6 @@ export class CreateOrderCommandHandler
         });
       });
     } catch (error) {
-      console.log(error);
       this._logger.debug(
         `--- Command: ${CreateOrderCommand.name} was not handled - response: ${error}`
       );

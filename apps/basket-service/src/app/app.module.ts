@@ -3,8 +3,8 @@ import {
   EVENT_BUS_CLIENT,
 } from '@e-shop-on-containers/event-bus';
 import { ILogger, LOGGER } from '@e-shop-on-containers/logger';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Logger, Module } from '@nestjs/common';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -22,13 +22,12 @@ import {
   MessageProcessor,
   ProductPriceChangedConsumer,
   RbmqEventBusClient,
-  RBMQ_MESSAGE_BUS_CLIENT,
   TypeOrmUnitOfWork,
 } from './infrastructure';
 
-export const queue = process.env.EVENT_QUEUE_NAME;
-export const eventBusConnection =
+const eventBusConnection =
   process.env.EVENT_BUS_CONNECTION || 'amqp://localhost:5672';
+const exchange = process.env.EXCHANGE;
 
 @Module({
   imports: [
@@ -39,28 +38,24 @@ export const eventBusConnection =
       autoLoadEntities: true,
     }),
     ScheduleModule.forRoot(),
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      uri: eventBusConnection,
+      exchanges: [
+        {
+          name: exchange,
+          type: 'topic',
+        },
+      ],
+    }),
     DatabaseModule,
   ],
-  controllers: [AppController, ProductPriceChangedConsumer],
+  controllers: [AppController],
   providers: [
     MessageProcessor,
+    ProductPriceChangedConsumer,
     {
       provide: EVENT_BUS_CLIENT,
       useClass: RbmqEventBusClient,
-    },
-    {
-      provide: RBMQ_MESSAGE_BUS_CLIENT,
-      useFactory: () =>
-        ClientProxyFactory.create({
-          transport: Transport.RMQ,
-          options: {
-            urls: [eventBusConnection],
-            queue,
-            queueOptions: {
-              durable: false,
-            },
-          },
-        }),
     },
     {
       provide: LOGGER,

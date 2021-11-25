@@ -7,6 +7,7 @@ services:
       dockerfile: ./apps/catalog-service/docker/build-app/Dockerfile
     environment:
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+      - EXCHANGE=e-shop-on-containers:dev
     ports:
       - '3000:3000'
     depends_on:
@@ -20,6 +21,7 @@ services:
       dockerfile: ./apps/ordering-service/docker/build-app/Dockerfile
     environment:
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+      - EXCHANGE=e-shop-on-containers:dev
     ports:
       - '3001:3000'
     depends_on:
@@ -50,6 +52,7 @@ services:
       dockerfile: ./apps/basket-service/docker/build-app/Dockerfile
     environment:
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+      - EXCHANGE=e-shop-on-containers:dev
     ports:
       - '3003:3000'
     depends_on:

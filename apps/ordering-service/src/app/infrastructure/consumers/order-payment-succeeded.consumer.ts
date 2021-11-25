@@ -1,6 +1,6 @@
 import { ILogger, LOGGER } from '@e-shop-on-containers/logger';
-import { Controller, Inject } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { Inject, Injectable } from '@nestjs/common';
 import { validate } from 'class-validator';
 import {
   InboxRepository,
@@ -10,7 +10,7 @@ import {
   SetPaidStatusCommand,
 } from '../../application';
 
-@Controller()
+@Injectable()
 export class OrderPaymentSucceededConsumer {
   constructor(
     private readonly _mediator: Mediator,
@@ -19,19 +19,17 @@ export class OrderPaymentSucceededConsumer {
     @Inject(LOGGER) private readonly _logger: ILogger
   ) {}
 
-  @EventPattern(OrderPaymentSucceededEvent.name)
-  async handle(
-    @Payload() event: OrderPaymentSucceededEvent,
-    @Ctx() context: RmqContext
-  ): Promise<void> {
+  @RabbitSubscribe({
+    exchange: process.env.EXCHANGE,
+    routingKey: OrderPaymentSucceededEvent.name,
+  })
+  async handle(event: OrderPaymentSucceededEvent): Promise<void | Nack> {
     this._logger.debug(
       `-- Handling integration event: ${
         event.id
       } at OrderingService - (${JSON.stringify(event)})`
     );
 
-    const channel = context.getChannelRef();
-    const originalMsg = context.getMessage();
     const processed = await this._inboxRepository.exists(event.id);
 
     if (processed) {
@@ -40,8 +38,6 @@ export class OrderPaymentSucceededConsumer {
           event.id
         } at OrderingService - (${JSON.stringify(event)}) was already processed`
       );
-
-      channel.ack(originalMsg);
 
       return;
     }
@@ -71,14 +67,14 @@ export class OrderPaymentSucceededConsumer {
         this._mediator.send(command),
         this._inboxRepository.create(event.id),
       ]);
-
-      channel.ack(originalMsg);
     } catch (error) {
       this._logger.error(
         `-- Command: ${SetPaidStatusCommand.name} - (${JSON.stringify(
           command
         )}) was failed. Error: ${error}`
       );
+
+      return new Nack(true);
     }
   }
 }

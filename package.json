@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^13.0.0",
     "@angular/platform-browser-dynamic": "^13.0.0",
     "@angular/router": "^13.0.0",
+    "@golevelup/nestjs-rabbitmq": "^1.18.1",
     "@nestjs/common": "^8.2.1",
     "@nestjs/core": "^8.2.1",
     "@nestjs/microservices": "^8.2.1",

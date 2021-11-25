@@ -2,40 +2,34 @@ import {
   EventBusClient,
   IntegrationEvent,
 } from '@e-shop-on-containers/event-bus';
-import { Inject, Logger } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { RBMQ_MESSAGE_BUS_CLIENT } from '../../application';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { Injectable, Logger } from '@nestjs/common';
 
+const exchange = process.env.EXCHANGE;
+
+@Injectable()
 export class RbmqEventBusClient implements EventBusClient {
   private readonly _logger = new Logger(RbmqEventBusClient.name);
 
-  constructor(
-    @Inject(RBMQ_MESSAGE_BUS_CLIENT)
-    private readonly _client: ClientProxy
-  ) {}
+  constructor(private readonly _amqpConnection: AmqpConnection) {}
 
-  publish(event: IntegrationEvent): Promise<void> {
+  async publish(event: IntegrationEvent): Promise<void> {
     this._logger.debug(
       `Trying to send event: ${JSON.stringify(event)} to Event bus`
     );
 
-    return new Promise((resolve, reject) => {
-      this._client.emit(event.name, event).subscribe({
-        next: () => {
-          this._logger.debug(
-            `Event: ${JSON.stringify(event)} was successfully sent to Event bus`
-          );
-          resolve();
-        },
-        error: (error) => {
-          this._logger.error(
-            `Event: ${JSON.stringify(
-              event
-            )} was not sent due to error: ${error}`
-          );
-          reject();
-        },
-      });
-    });
+    try {
+      await this._amqpConnection.publish(exchange, event.name, event);
+
+      this._logger.debug(
+        `Event: ${JSON.stringify(event)} was successfully sent to Event bus`
+      );
+    } catch (error) {
+      this._logger.error(
+        `Event: ${JSON.stringify(event)} was not sent due to error: ${error}`
+      );
+
+      throw error;
+    }
   }
 }

@@ -2,8 +2,8 @@ import {
   EventBusClient,
   EVENT_BUS_CLIENT,
 } from '@e-shop-on-containers/event-bus';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Logger, Module } from '@nestjs/common';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -17,7 +17,6 @@ import {
   OutboxRepository,
   OutboxService,
   OUTBOX_REPOSITORY,
-  RBMQ_MESSAGE_BUS_CLIENT,
   UnitOfWork,
 } from './application';
 import { AppController } from './controllers';
@@ -28,9 +27,9 @@ import {
   TypeOrmUnitOfWork,
 } from './infrastructure';
 
-const queue = process.env.EVENT_QUEUE_NAME;
 const eventBusConnection =
   process.env.EVENT_BUS_CONNECTION || 'amqp://localhost:5672';
+const exchange = process.env.EXCHANGE;
 
 @Module({
   imports: [
@@ -41,6 +40,15 @@ const eventBusConnection =
       autoLoadEntities: true,
     }),
     ScheduleModule.forRoot(),
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      uri: eventBusConnection,
+      exchanges: [
+        {
+          name: exchange,
+          type: 'topic',
+        },
+      ],
+    }),
     DatabaseModule,
   ],
   controllers: [AppController],
@@ -49,20 +57,6 @@ const eventBusConnection =
     {
       provide: EVENT_BUS_CLIENT,
       useClass: RbmqEventBusClient,
-    },
-    {
-      provide: RBMQ_MESSAGE_BUS_CLIENT,
-      useFactory: () =>
-        ClientProxyFactory.create({
-          transport: Transport.RMQ,
-          options: {
-            urls: [eventBusConnection],
-            queue,
-            queueOptions: {
-              durable: false,
-            },
-          },
-        }),
     },
     {
       provide: OutboxService,

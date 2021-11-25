@@ -10,7 +10,7 @@ export class TypeOrmOutboxRepository implements OutboxRepository {
     private readonly _outboxRepository: Repository<OutboxEntity>
   ) {}
 
-  async create(message: { id: string; payload: string }): Promise<void> {
+  async create(message: Message): Promise<void> {
     const createdMessage = this._outboxRepository.create(message);
 
     await this._outboxRepository.insert(createdMessage);

@@ -1,6 +1,6 @@
 import { ILogger, LOGGER } from '@e-shop-on-containers/logger';
+import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Controller, Inject } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
 import { validate } from 'class-validator';
 import {
   CreateOrderCommand,
@@ -19,19 +19,17 @@ export class UserCheckoutAcceptedConsumer {
     @Inject(LOGGER) private readonly _logger: ILogger
   ) {}
 
-  @EventPattern(UserCheckoutAcceptedEvent.name)
-  async handle(
-    @Payload() event: UserCheckoutAcceptedEvent,
-    @Ctx() context: RmqContext
-  ): Promise<void> {
+  @RabbitSubscribe({
+    exchange: process.env.EXCHANGE,
+    routingKey: UserCheckoutAcceptedEvent.name,
+  })
+  async handle(event: UserCheckoutAcceptedEvent): Promise<void | Nack> {
     this._logger.debug(
       `-- Handling integration event: ${
         event.id
       } at OrderingService - (${JSON.stringify(event)})`
     );
 
-    const channel = context.getChannelRef();
-    const originalMsg = context.getMessage();
     const processed = await this._inboxRepository.exists(event.id);
 
     if (processed) {
@@ -40,8 +38,6 @@ export class UserCheckoutAcceptedConsumer {
           event.id
         } at OrderingService - (${JSON.stringify(event)}) was already processed`
       );
-
-      channel.ack(originalMsg);
 
       return;
     }
@@ -86,8 +82,6 @@ export class UserCheckoutAcceptedConsumer {
         this._inboxRepository.create(event.id),
       ]);
 
-      channel.ack(originalMsg);
-
       if (result.success) {
         this._logger.debug('-- CreateOrderCommand succeeded');
       } else {
@@ -99,6 +93,8 @@ export class UserCheckoutAcceptedConsumer {
           command
         )}) was failed. Error: ${error}`
       );
+
+      return new Nack(true);
     }
   }
 }
