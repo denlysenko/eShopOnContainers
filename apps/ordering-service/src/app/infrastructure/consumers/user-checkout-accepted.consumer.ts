@@ -47,7 +47,7 @@ export class UserCheckoutAcceptedConsumer {
     }
 
     const command = new CreateOrderCommand(
-      event.basket.items,
+      event.basket.basketItems,
       event.userId,
       event.userName,
       event.city,
