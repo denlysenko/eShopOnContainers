@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { BuyerEntity } from './buyer.entity';
 import { OrderItemEntity } from './order-item.entity';
 import { OrderStatusEntity } from './order-status.entity';
@@ -56,7 +48,6 @@ export class OrderEntity {
   @Column()
   orderStatusId: number;
 
-  @OneToOne(() => OrderStatusEntity)
-  @JoinColumn()
+  @ManyToOne(() => OrderStatusEntity)
   orderStatus: OrderStatusEntity;
 }
