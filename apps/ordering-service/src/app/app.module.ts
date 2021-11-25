@@ -6,6 +6,7 @@ import { ILogger, LOGGER } from '@e-shop-on-containers/logger';
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   CancelOrderCommandHandler,
@@ -57,6 +58,7 @@ export const eventBusConnection =
       synchronize: false,
       autoLoadEntities: true,
     }),
+    ScheduleModule.forRoot(),
     DatabaseModule,
   ],
   controllers: [
