@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { BasketComponent } from './basket.component';
 import { BasketService } from './basket.service';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { BasketService } from './basket.service';
     ]),
     SharedModule,
   ],
-  declarations: [BasketComponent],
+  declarations: [BasketComponent, CheckoutComponent],
   providers: [BasketService],
 })
 export class BasketModule {}

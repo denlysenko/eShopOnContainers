@@ -68,6 +68,10 @@ export class BasketSharedService {
     this.setBasket(this._basketItems).subscribe();
   }
 
+  public setBasketCheckedOut(): void {
+    this._basketItemsSource.next();
+  }
+
   private _getBasket(): Observable<IBasketItem[]> {
     return this._httpClient.get<IBasket>(`${this._basketUrl}`).pipe(
       tap(({ basketItems }) => (this._basketItems = basketItems)),

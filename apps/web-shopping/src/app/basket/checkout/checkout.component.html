@@ -1,0 +1,173 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your cart</span>
+        <span class="badge badge-secondary badge-pill">{{basketItems.length}}</span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-condensed"
+            *ngFor="let item of basketItems">
+          <div>
+            <h6 class="my-0">{{item.productName}}</h6>
+            <small class="text-muted">{{item.quantity}} pcs</small>
+          </div>
+          <span class="text-muted price">$ {{(item.unitPrice *
+            item.quantity) | number:'.2-2'}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Total (USD)</span>
+          <strong>$ {{total | number:'.2-2'}}</strong>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8 order-md-1">
+      <h4 class="mb-3">Delivery address</h4>
+      <form class="needs-validation"
+            [formGroup]="form"
+            (submit)="continue()"
+            novalidate>
+        <div class="mb-3">
+          <label for="username">Username</label>
+          <input type="text"
+                 class="form-control"
+                 id="username"
+                 placeholder="Username"
+                 formControlName="buyer">
+          <div class="invalid-feedback"
+               style="width: 100%;">
+            Your username is required
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="address">Street Address</label>
+          <input type="text"
+                 class="form-control"
+                 id="address"
+                 placeholder="1234 Main St"
+                 formControlName="street">
+          <div class="invalid-feedback">
+            Please enter your shipping address
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="city">City</label>
+          <input type="text"
+                 class="form-control"
+                 id="city"
+                 placeholder="City"
+                 formControlName="city">
+          <div class="invalid-feedback">
+            Please enter your shipping city
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-5 mb-3">
+            <label for="country">Country</label>
+            <select class="custom-select d-block w-100"
+                    id="country"
+                    formControlName="country">
+              <option value="">Choose...</option>
+              <option>United States</option>
+            </select>
+            <div class="invalid-feedback">
+              Please select a valid country
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="state">State</label>
+            <select class="custom-select d-block w-100"
+                    id="state"
+                    formControlName="state">
+              <option value="">Choose...</option>
+              <option>California</option>
+            </select>
+            <div class="invalid-feedback">
+              Please provide a valid state
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="zip">Zip</label>
+            <input type="text"
+                   class="form-control"
+                   id="zip"
+                   placeholder=""
+                   formControlName="zipCode">
+            <div class="invalid-feedback">
+              Zip code required
+            </div>
+          </div>
+        </div>
+
+        <hr class="mb-4">
+
+        <h4 class="mb-3">Payment</h4>
+
+        <div class="d-block my-3">
+          <div class="custom-control custom-radio"
+               *ngFor="let cardType of (cardTypes$ | async)">
+            <input [id]="cardType.id"
+                   type="radio"
+                   class="custom-control-input"
+                   formControlName="cardTypeId"
+                   [value]="cardType.id">
+            <label class="custom-control-label"
+                   [for]="cardType.id">{{cardType.name}}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-name">Name on card</label>
+            <input type="text"
+                   class="form-control"
+                   id="cc-name"
+                   placeholder=""
+                   formControlName="cardHolderName">
+            <small class="text-muted">Full name as displayed on card</small>
+            <div class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-number">Credit card number</label>
+            <input type="text"
+                   class="form-control"
+                   id="cc-number"
+                   placeholder=""
+                   formControlName="cardNumber">
+            <div class="invalid-feedback">
+              Credit card number is required
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-expiration">Expiration</label>
+            <input type="date"
+                   class="form-control"
+                   id="cc-expiration"
+                   placeholder=""
+                   formControlName="cardExpiration">
+            <div class="invalid-feedback">
+              Expiration date required
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="cc-expiration">CVV</label>
+            <input type="text"
+                   class="form-control"
+                   id="cc-cvv"
+                   placeholder=""
+                   formControlName="cardSecurityNumber">
+            <div class="invalid-feedback">
+              Security code required
+            </div>
+          </div>
+        </div>
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block"
+                type="submit">[ Continue to checkout ]</button>
+      </form>
+    </div>
+  </div>

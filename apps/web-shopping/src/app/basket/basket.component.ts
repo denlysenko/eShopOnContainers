@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, tap } from 'rxjs';
 import { IBasketItem } from '../shared/models/basket-item.model';
 import { BasketSharedService } from '../shared/services/basket-shared.service';
+import { BasketService } from './basket.service';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 @Component({
   selector: 'esh-basket',
@@ -23,26 +26,47 @@ export class BasketComponent {
     })
   );
 
-  constructor(private readonly _basketSharedService: BasketSharedService) {}
+  constructor(
+    private readonly _basketSharedService: BasketSharedService,
+    private readonly _modalService: NgbModal,
+    private readonly _basketService: BasketService
+  ) {}
 
-  public itemQuantityChanged(item: IBasketItem) {
+  public itemQuantityChanged() {
     this._calculateTotalPrice();
     this._basketSharedService.setBasket(this._basketItems).subscribe();
   }
 
-  public update(event: any): void {
-    this._basketSharedService
-      .setBasket(this._basketItems)
-      // TODO: add error handling
-      .subscribe();
+  public update(): void {
+    this._basketSharedService.setBasket(this._basketItems).subscribe({
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
-  checkOut(event: any) {
-    // this.update(event).subscribe((x) => {
-    //   this.errorMessages = [];
-    //   this.basketwrapper.basket = this.basket;
-    //   this.router.navigate(['order']);
-    // });
+  checkOut() {
+    const modalRef = this._modalService.open(CheckoutComponent, { size: 'lg' });
+
+    modalRef.componentInstance.basketItems = this._basketItems;
+    modalRef.result
+      .then((result) => {
+        this._basketService
+          .checkout({
+            ...result,
+            cardExpiration: new Date(result.cardExpiration).toUTCString(),
+          })
+          .pipe(tap(() => this._basketSharedService.setBasketCheckedOut()))
+          .subscribe({
+            next: () => {
+              // this.router.navigate(['order']);
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
+      })
+      .catch(() => {});
   }
 
   private _calculateTotalPrice() {

@@ -1,0 +1,49 @@
+@import '../../variables';
+
+.container {
+  padding-bottom: 1rem;
+  padding-top: 2rem;
+
+  .badge-secondary {
+    background-color: $color-secondary;
+  }
+
+  .price {
+    white-space: nowrap;
+  }
+
+  .btn {
+    background-color: $color-secondary;
+    border: 0;
+    border-radius: 0;
+    color: $color-foreground-brighter;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: $font-weight-normal;
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    transition: all $animation-speed-default;
+
+    &:hover {
+      background-color: $color-secondary-darker;
+      transition: all $animation-speed-default;
+    }
+  }
+
+  .invalid-feedback {
+    display: none;
+  }
+
+  .ng-submitted {
+    .ng-invalid {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgb(220 53 69 / 25%);
+
+      ~ .invalid-feedback {
+        display: block;
+      }
+    }
+  }
+}
