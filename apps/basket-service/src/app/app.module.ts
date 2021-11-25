@@ -5,6 +5,7 @@ import {
 import { ILogger, LOGGER } from '@e-shop-on-containers/logger';
 import { Logger, Module } from '@nestjs/common';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AppService,
@@ -37,6 +38,7 @@ export const eventBusConnection =
       synchronize: false,
       autoLoadEntities: true,
     }),
+    ScheduleModule.forRoot(),
     DatabaseModule,
   ],
   controllers: [AppController, ProductPriceChangedConsumer],
