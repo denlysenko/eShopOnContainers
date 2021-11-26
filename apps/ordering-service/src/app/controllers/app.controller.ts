@@ -76,8 +76,11 @@ export class AppController {
     status: HttpStatus.NOT_FOUND,
     description: 'Not Found Error',
   })
-  getOrder(@Param('id', ParseIntPipe) id: number): Promise<OrderReadDto> {
-    return this._orderQueries.getOrder(id);
+  getOrder(
+    @Param('id', ParseIntPipe) id: number,
+    @Identity() identity: string
+  ): Promise<OrderReadDto> {
+    return this._orderQueries.getOrder(id, identity);
   }
 
   // PUT api/v1/orders/:id/cancel

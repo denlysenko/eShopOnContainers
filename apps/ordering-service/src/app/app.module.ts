@@ -97,9 +97,11 @@ export const exchange = process.env.EXCHANGE;
     },
     {
       provide: OrderQueries,
-      useFactory: (ordersRepository: OrderRepository) =>
-        new OrderQueries(ordersRepository),
-      inject: [ORDER_REPOSITORY],
+      useFactory: (
+        ordersRepository: OrderRepository,
+        buyerRepository: BuyerRepository
+      ) => new OrderQueries(ordersRepository, buyerRepository),
+      inject: [ORDER_REPOSITORY, BUYER_REPOSITORY],
     },
     {
       provide: CancelOrderCommandHandler,

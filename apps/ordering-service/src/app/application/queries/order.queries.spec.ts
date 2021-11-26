@@ -1,4 +1,5 @@
 import { EntityNotFoundException } from '../exceptions/entity-not-found.exception';
+import { buyerRepositoryMock } from '../mocks/buyer-repository.mock';
 import { cardTypeMock } from '../mocks/card-type.mock';
 import { ordersRepositoryMock } from '../mocks/order-repository.mock';
 import { orderSummaryMock } from '../mocks/order-summary.mock';
@@ -9,7 +10,7 @@ describe('OrderQueries', () => {
   let service: OrderQueries;
 
   beforeEach(() => {
-    service = new OrderQueries(ordersRepositoryMock);
+    service = new OrderQueries(ordersRepositoryMock, buyerRepositoryMock);
   });
 
   afterEach(() => {
@@ -18,17 +19,33 @@ describe('OrderQueries', () => {
   });
 
   describe('queryOrder', () => {
+    const buyerIdentity = 'buyer_id';
+    const buyerId = 2;
+
     beforeEach(() => {
       jest
         .spyOn(ordersRepositoryMock, 'queryOrder')
         .mockResolvedValue(orderMock);
+      jest
+        .spyOn(buyerRepositoryMock, 'findByIdentity')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .mockResolvedValue({ id: buyerId } as any);
+    });
+
+    it('should find buyer', async () => {
+      await service.getOrder(orderMock.id, buyerIdentity);
+
+      expect(buyerRepositoryMock.findByIdentity).toHaveBeenCalledWith(
+        buyerIdentity
+      );
     });
 
     it('should call getOrder with correct param', async () => {
-      await service.getOrder(orderMock.id);
+      await service.getOrder(orderMock.id, buyerIdentity);
 
       expect(ordersRepositoryMock.queryOrder).toHaveBeenCalledWith(
-        orderMock.id
+        orderMock.id,
+        buyerId
       );
     });
 
@@ -38,7 +55,7 @@ describe('OrderQueries', () => {
         .mockResolvedValueOnce(null);
 
       try {
-        await service.getOrder(orderMock.id);
+        await service.getOrder(orderMock.id, buyerIdentity);
       } catch (error) {
         expect(error).toBeInstanceOf(EntityNotFoundException);
         expect(error.message).toEqual(
@@ -48,7 +65,7 @@ describe('OrderQueries', () => {
     });
 
     it('should transform to OrderReadDto', async () => {
-      expect(await service.getOrder(orderMock.id)).toEqual({
+      expect(await service.getOrder(orderMock.id, buyerIdentity)).toEqual({
         orderNumber: 1,
         street: 'Street',
         city: 'City',

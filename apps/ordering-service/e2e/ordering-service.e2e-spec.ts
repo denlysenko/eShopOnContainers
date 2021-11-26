@@ -25,7 +25,7 @@ import {
   EntityNotFoundExceptionFilter,
   MessageProcessor,
 } from '../src/app/infrastructure';
-import { buyer } from './fixtures/buyer';
+import { buyers } from './fixtures/buyer';
 import { cardTypes } from './fixtures/card-types';
 import { order } from './fixtures/order';
 import { orderItems } from './fixtures/order-items';
@@ -79,7 +79,7 @@ describe('Ordering service', () => {
     await seedOrderItems(connection);
     await seedSequences(connection);
 
-    accessToken = jwt.sign({ sub: buyer.identityGuid }, 'qwerty');
+    accessToken = jwt.sign({ sub: buyers[0].identityGuid }, 'qwerty');
   });
 
   describe('/GET v1/orders', () => {
@@ -133,7 +133,7 @@ describe('Ordering service', () => {
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    it('returns 404 if order not exists', async () => {
+    it('returns 404 if order id not exists', async () => {
       const id = 25;
 
       const response = await app.inject({
@@ -149,6 +149,41 @@ describe('Ordering service', () => {
       const body = JSON.parse(response.body);
 
       expect(body.message).toEqual(`Order with id ${id} not found`);
+    });
+
+    it('returns 404 if buyer not exists', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/orders/${order.id}`,
+        headers: {
+          Authorization: `Bearer ${jwt.sign({ sub: 'not_exists' }, 'qwerty')}`,
+        },
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.NOT_FOUND);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.message).toEqual(`Order with id ${order.id} not found`);
+    });
+
+    it('returns 404 if order is not belong to buyer identity', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        path: `/v1/orders/${order.id}`,
+        headers: {
+          Authorization: `Bearer ${jwt.sign(
+            { sub: buyers[1].identityGuid },
+            'qwerty'
+          )}`,
+        },
+      });
+
+      expect(response.statusCode).toBe(HttpStatus.NOT_FOUND);
+
+      const body = JSON.parse(response.body);
+
+      expect(body.message).toEqual(`Order with id ${order.id} not found`);
     });
 
     it('returns transformed records', async () => {
@@ -763,8 +798,8 @@ describe('Ordering service', () => {
 
     beforeEach(async () => {
       event = new UserCheckoutAcceptedEvent(
-        buyer.identityGuid,
-        buyer.name,
+        buyers[0].identityGuid,
+        buyers[0].name,
         'City',
         'Street',
         'State',
@@ -775,8 +810,8 @@ describe('Ordering service', () => {
         new Date('2070-01-31'),
         '123',
         cardTypes[0].id,
-        buyer.name,
-        new CustomerBasket(buyer.id, [
+        buyers[0].name,
+        new CustomerBasket(buyers[0].id, [
           {
             id: '12',
             productId: 34,
@@ -816,8 +851,8 @@ describe('Ordering service', () => {
 
     it('creates new order with the same payment', async () => {
       const evt = new UserCheckoutAcceptedEvent(
-        buyer.identityGuid,
-        buyer.name,
+        buyers[0].identityGuid,
+        buyers[0].name,
         'City',
         'Street',
         'State',
@@ -828,8 +863,8 @@ describe('Ordering service', () => {
         new Date(paymentMethod.expiration),
         '123',
         paymentMethod.cardTypeId,
-        buyer.name,
-        new CustomerBasket(buyer.id, [
+        buyers[0].name,
+        new CustomerBasket(buyers[0].id, [
           {
             id: '12',
             productId: 34,
@@ -941,7 +976,7 @@ describe('Ordering service', () => {
         .getMany();
 
       expect(orders.length).toBe(2);
-      expect(buyers.length).toBe(2);
+      expect(buyers.length).toBe(3);
       expect(paymentMethods.length).toBe(2);
     });
   });

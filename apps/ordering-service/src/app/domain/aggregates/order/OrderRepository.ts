@@ -1,7 +1,7 @@
 import { Order } from './Order';
 
 export interface OrderRepository {
-  queryOrder(id: number): Promise<unknown>;
+  queryOrder(id: number, buyerId: number): Promise<unknown>;
   queryOrdersFromUser(userId: string): Promise<unknown[]>;
   queryCardTypes(): Promise<unknown[]>;
   getOrder(id: number): Promise<Order>;

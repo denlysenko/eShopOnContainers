@@ -1,4 +1,4 @@
-import { buyer } from './buyer';
+import { buyers } from './buyer';
 import { cardTypes } from './card-types';
 
 export const paymentMethod = {
@@ -8,5 +8,5 @@ export const paymentMethod = {
   cardSecurityNumber: '123',
   expiration: '2024-10-10T12:40:20.288Z',
   cardTypeId: cardTypes[1].id,
-  buyerId: buyer.id,
+  buyerId: buyers[0].id,
 };

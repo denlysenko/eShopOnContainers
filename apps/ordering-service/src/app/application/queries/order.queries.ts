@@ -1,4 +1,4 @@
-import { OrderRepository } from '../../domain';
+import { BuyerRepository, OrderRepository } from '../../domain';
 import { CardTypeReadDto } from '../dto/card-type-read.dto';
 import { OrderReadDto } from '../dto/order-read.dto';
 import { OrderSummaryDto } from '../dto/order-summary.dto';
@@ -7,10 +7,19 @@ import { CardTypesMapper } from '../mappers/card-types.mapper';
 import { OrdersMapper } from '../mappers/orders.mapper';
 
 export class OrderQueries {
-  constructor(private readonly _orderRepository: OrderRepository) {}
+  constructor(
+    private readonly _orderRepository: OrderRepository,
+    private readonly _buyerRepository: BuyerRepository
+  ) {}
 
-  async getOrder(id: number): Promise<OrderReadDto> {
-    const order = await this._orderRepository.queryOrder(id);
+  async getOrder(id: number, identity: string): Promise<OrderReadDto> {
+    const buyer = await this._buyerRepository.findByIdentity(identity);
+
+    if (!buyer) {
+      throw new EntityNotFoundException(`Order with id ${id} not found`);
+    }
+
+    const order = await this._orderRepository.queryOrder(id, buyer.id);
 
     if (!order) {
       throw new EntityNotFoundException(`Order with id ${id} not found`);

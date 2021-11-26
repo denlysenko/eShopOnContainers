@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import { buyer } from '../fixtures/buyer';
+import { buyers } from '../fixtures/buyer';
 import { order } from '../fixtures/order';
 import { orderItems } from '../fixtures/order-items';
 import { paymentMethod } from '../fixtures/payment-method';
@@ -23,7 +23,7 @@ export async function seedSequences(connection: Connection): Promise<void> {
     `CREATE TABLE "buyer_seq" ("nextval" integer NOT NULL)`
   );
   await queryRunner.query(`INSERT INTO "buyer_seq" VALUES ($1)`, [
-    buyer.id + 1,
+    buyers[buyers.length - 1].id + 1,
   ]);
   await queryRunner.query(
     `CREATE TABLE "payment_method_seq" ("nextval" integer NOT NULL)`

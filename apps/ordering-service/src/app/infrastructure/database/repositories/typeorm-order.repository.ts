@@ -21,7 +21,7 @@ export class TypeOrmOrderRepository implements OrderRepository {
     return this._cardTypesRepository.find();
   }
 
-  queryOrder(id: number) {
+  queryOrder(id: number, buyerId: number) {
     return this._ordersRepository
       .createQueryBuilder('order')
       .leftJoinAndSelect('order.orderStatus', 'os')
@@ -41,6 +41,7 @@ export class TypeOrmOrderRepository implements OrderRepository {
         'oi.pictureUrl',
       ])
       .where('order.id = :id', { id })
+      .andWhere('order.buyerId = :buyerId', { buyerId })
       .getOne();
   }
 
