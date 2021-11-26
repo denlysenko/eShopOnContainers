@@ -1,9 +1,5 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import {
-  ClientProxy,
-  MicroserviceOptions,
-  Transport,
-} from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -11,7 +7,7 @@ import {
 import { Test } from '@nestjs/testing';
 import * as jwt from 'jsonwebtoken';
 import { Connection } from 'typeorm';
-import { AppModule, eventBusConnection, queue } from '../src/app/app.module';
+import { AppModule, exchange } from '../src/app/app.module';
 import {
   BasketCheckoutDto,
   BasketItemCreateDto,
@@ -21,7 +17,6 @@ import { exceptionFactory } from '../src/app/exception.factory';
 import {
   EntityNotFoundExceptionFilter,
   MessageProcessor,
-  RBMQ_MESSAGE_BUS_CLIENT,
 } from '../src/app/infrastructure';
 import { basketItem } from './fixtures/basket-item';
 import { seedBasketItems } from './seeders/seed-basket-items';
@@ -35,7 +30,7 @@ function sleep(ms: number) {
 describe('Basket service', () => {
   let app: NestFastifyApplication;
   let accessToken: string;
-  let client: ClientProxy;
+  let client: AmqpConnection;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -49,20 +44,7 @@ describe('Basket service', () => {
     app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
     app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
-    client = app.get(RBMQ_MESSAGE_BUS_CLIENT);
-    app.connectMicroservice<MicroserviceOptions>({
-      transport: Transport.RMQ,
-      options: {
-        urls: [eventBusConnection],
-        queue,
-        noAck: false,
-        queueOptions: {
-          durable: false,
-        },
-      },
-    });
-
-    await app.startAllMicroservices();
+    client = app.get(AmqpConnection);
 
     await app.init();
   });
@@ -357,14 +339,6 @@ describe('Basket service', () => {
   });
 
   describe('ProductPriceChangedEvent', () => {
-    beforeEach(async () => {
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
-    });
-
     it('does not process if already has been received', async () => {
       const newPrice = 21.25;
       const event = new ProductPriceChangedEvent(
@@ -382,7 +356,7 @@ describe('Basket service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -405,7 +379,7 @@ describe('Basket service', () => {
         basketItem.unitPrice
       );
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);

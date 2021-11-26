@@ -27,7 +27,7 @@ import {
 
 const eventBusConnection =
   process.env.EVENT_BUS_CONNECTION || 'amqp://localhost:5672';
-const exchange = process.env.EXCHANGE;
+export const exchange = process.env.EXCHANGE;
 
 @Module({
   imports: [

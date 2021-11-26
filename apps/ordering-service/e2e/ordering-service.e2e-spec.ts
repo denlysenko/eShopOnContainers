@@ -1,9 +1,5 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import {
-  ClientProxy,
-  MicroserviceOptions,
-  Transport,
-} from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -12,7 +8,7 @@ import { Test } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { Connection } from 'typeorm';
-import { AppModule, eventBusConnection, queue } from '../src/app/app.module';
+import { AppModule, exchange } from '../src/app/app.module';
 import {
   ConfirmedOrderStockItem,
   CustomerBasket,
@@ -28,7 +24,6 @@ import { exceptionFactory } from '../src/app/exception.factory';
 import {
   EntityNotFoundExceptionFilter,
   MessageProcessor,
-  RBMQ_MESSAGE_BUS_CLIENT,
 } from '../src/app/infrastructure';
 import { buyer } from './fixtures/buyer';
 import { cardTypes } from './fixtures/card-types';
@@ -51,7 +46,7 @@ function sleep(ms: number) {
 describe('Ordering service', () => {
   let app: NestFastifyApplication;
   let accessToken: string;
-  let client: ClientProxy;
+  let client: AmqpConnection;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -64,20 +59,9 @@ describe('Ordering service', () => {
     app = moduleRef.createNestApplication(new FastifyAdapter());
     app.useGlobalFilters(new EntityNotFoundExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
-    client = app.get(RBMQ_MESSAGE_BUS_CLIENT);
-    app.connectMicroservice<MicroserviceOptions>({
-      transport: Transport.RMQ,
-      options: {
-        urls: [eventBusConnection],
-        queue,
-        noAck: false,
-        queueOptions: {
-          durable: false,
-        },
-      },
-    });
 
-    await app.startAllMicroservices();
+    client = app.get(AmqpConnection);
+
     await app.init();
   });
 
@@ -501,14 +485,6 @@ describe('Ordering service', () => {
   });
 
   describe('GracePeriodConfirmedEvent', () => {
-    beforeEach(async () => {
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
-    });
-
     it('does not process if already has been received', async () => {
       const event = new GracePeriodConfirmedEvent(order.id);
       const connection = app.get(Connection);
@@ -520,7 +496,7 @@ describe('Ordering service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
       // wait for async event handler is done
       await sleep(1000);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -544,7 +520,7 @@ describe('Ordering service', () => {
         .where({ id: order.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -561,14 +537,6 @@ describe('Ordering service', () => {
   });
 
   describe('OrderPaymentFailedEvent', () => {
-    beforeEach(async () => {
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
-    });
-
     it('does not process if already has been received', async () => {
       const event = new OrderPaymentFailedEvent(order.id);
       const connection = app.get(Connection);
@@ -580,7 +548,7 @@ describe('Ordering service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -606,7 +574,7 @@ describe('Ordering service', () => {
         .where({ id: order.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -623,14 +591,6 @@ describe('Ordering service', () => {
   });
 
   describe('OrderPaymentSucceededEvent', () => {
-    beforeEach(async () => {
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
-    });
-
     it('does not process if already has been received', async () => {
       const event = new OrderPaymentSucceededEvent(order.id);
       const connection = app.get(Connection);
@@ -642,7 +602,7 @@ describe('Ordering service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -668,7 +628,7 @@ describe('Ordering service', () => {
         .where({ id: order.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -685,14 +645,6 @@ describe('Ordering service', () => {
   });
 
   describe('OrderStockConfirmedEvent', () => {
-    beforeEach(async () => {
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
-    });
-
     it('does not process if already has been received', async () => {
       const event = new OrderStockConfirmedEvent(order.id);
       const connection = app.get(Connection);
@@ -704,7 +656,7 @@ describe('Ordering service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -730,7 +682,7 @@ describe('Ordering service', () => {
         .where({ id: order.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -747,14 +699,6 @@ describe('Ordering service', () => {
   });
 
   describe('OrderStockRejectedEvent', () => {
-    beforeEach(async () => {
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
-    });
-
     it('does not process if already has been received', async () => {
       const orderStockItems = orderItems.map(
         (item) => new ConfirmedOrderStockItem(item.productId, false)
@@ -769,7 +713,7 @@ describe('Ordering service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -798,7 +742,7 @@ describe('Ordering service', () => {
         .where({ id: order.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -844,12 +788,6 @@ describe('Ordering service', () => {
           },
         ])
       );
-
-      await client.connect();
-    });
-
-    afterEach(() => {
-      client.close();
     });
 
     it('does not process if already has been received', async () => {
@@ -862,7 +800,7 @@ describe('Ordering service', () => {
         .values({ id: event.id })
         .execute();
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -905,7 +843,7 @@ describe('Ordering service', () => {
       );
       const connection = app.get(Connection);
 
-      client.emit(evt.name, evt);
+      client.publish(exchange, evt.name, evt);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -929,7 +867,7 @@ describe('Ordering service', () => {
     it('creates new order and new payment ', async () => {
       const connection = app.get(Connection);
 
-      client.emit(event.name, event);
+      client.publish(exchange, event.name, event);
 
       // wait for async event handler is done
       await sleep(1000);
@@ -979,7 +917,7 @@ describe('Ordering service', () => {
       );
       const connection = app.get(Connection);
 
-      client.emit(evt.name, evt);
+      client.publish(exchange, evt.name, evt);
 
       // wait for async event handler is done
       await sleep(1000);

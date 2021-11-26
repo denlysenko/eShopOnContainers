@@ -8,6 +8,7 @@ services:
     environment:
       - PG_CONNECTION_STRING=postgres://${PG_CATALOG_USER}:${PG_CATALOG_PASSWORD}@postgres/catalog-db-test
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+      - EXCHANGE=e-shop-on-containers:dev
     depends_on:
       - postgres
 
@@ -18,6 +19,7 @@ services:
     environment:
       - PG_CONNECTION_STRING=postgres://${PG_ORDERING_USER}:${PG_ORDERING_PASSWORD}@postgres/ordering-db-test
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+      - EXCHANGE=e-shop-on-containers:dev
     depends_on:
       - postgres
   
@@ -28,6 +30,7 @@ services:
     environment:
       - PG_CONNECTION_STRING=postgres://${PG_BASKET_USER}:${PG_BASKET_PASSWORD}@postgres/basket-db-test
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
+      - EXCHANGE=e-shop-on-containers:dev
     depends_on:
       - postgres
 
