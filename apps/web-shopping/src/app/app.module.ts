@@ -24,6 +24,11 @@ import { SharedModule } from './shared/shared.module';
           loadChildren: () =>
             import('./basket/basket.module').then((m) => m.BasketModule),
         },
+        {
+          path: 'orders',
+          loadChildren: () =>
+            import('./orders/orders.module').then((m) => m.OrdersModule),
+        },
         { path: '**', component: PageNotFoundComponent },
       ],
       {

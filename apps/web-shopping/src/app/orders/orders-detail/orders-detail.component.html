@@ -1,0 +1,84 @@
+<div class="esh-orders_detail">
+  <esh-header url="/orders">Back to list</esh-header>
+
+  <div class="container"
+       *ngIf="(order$ | async) as order">
+    <section class="esh-orders_detail-section">
+      <article class="esh-orders_detail-titles row">
+        <section class="esh-orders_detail-title col-3">Order number</section>
+        <section class="esh-orders_detail-title col-3">Date</section>
+        <section class="esh-orders_detail-title col-3">Total</section>
+        <section class="esh-orders_detail-title col-3">Status</section>
+      </article>
+
+      <article class="esh-orders_detail-items row">
+        <section class="esh-orders_detail-item col-3">{{order.orderNumber}}</section>
+        <section class="esh-orders_detail-item col-3">{{order.date | date:'short'}}</section>
+        <section class="esh-orders_detail-item col-3">$ {{order.total | number:'.2-2'}}</section>
+        <section class="esh-orders_detail-item col-3">{{order.status}}</section>
+      </article>
+    </section>
+
+    <section class="esh-orders_detail-section">
+      <article class="esh-orders_detail-titles row">
+        <section class="esh-orders_detail-title col-12">Description</section>
+      </article>
+
+      <article class="esh-orders_detail-items row">
+        <section class="esh-orders_detail-item col-12">{{order.description}}</section>
+      </article>
+    </section>
+
+    <section class="esh-orders_detail-section">
+      <article class="esh-orders_detail-titles row">
+        <section class="esh-orders_detail-title col-12">Shipping address</section>
+      </article>
+
+      <article class="esh-orders_detail-items row">
+        <section class="esh-orders_detail-item col-12">{{order.street}}</section>
+      </article>
+
+      <article class="esh-orders_detail-items row">
+        <section class="esh-orders_detail-item col-12">{{order.city}}</section>
+      </article>
+
+      <article class="esh-orders_detail-items row">
+        <section class="esh-orders_detail-item col-12">{{order.country}}</section>
+      </article>
+    </section>
+
+    <section class="esh-orders_detail-section">
+      <article class="esh-orders_detail-titles row">
+        <section class="esh-orders_detail-title col-12">Order details</section>
+      </article>
+
+      <article class="esh-orders_detail-items esh-orders_detail-items--border row"
+               *ngFor="let item of order.orderItems">
+        <section class="esh-orders_detail-item col-md-4 hidden-md-down">
+          <img class="esh-orders_detail-image"
+               src="{{item.pictureUrl}}">
+        </section>
+        <section class="esh-orders_detail-item esh-orders_detail-item--middle col-4">{{item.productName}}
+        </section>
+        <section class="esh-orders_detail-item esh-orders_detail-item--middle col-1">$ {{item.unitPrice |
+          number:'.2-2'}}</section>
+        <section class="esh-orders_detail-item esh-orders_detail-item--middle col-1">{{item.units}}</section>
+        <section class="esh-orders_detail-item esh-orders_detail-item--middle col-2">$ {{(item.units *
+          item.unitPrice) | number:'.2-2'}}</section>
+      </article>
+    </section>
+
+    <section class="esh-orders_detail-section esh-orders_detail-section--right">
+      <article class="esh-orders_detail-titles esh-basket-titles--clean row">
+        <section class="esh-orders_detail-title col-9"></section>
+        <section class="esh-orders_detail-title col-2">Total</section>
+      </article>
+
+      <article class="esh-orders_detail-items row">
+        <section class="esh-orders_detail-item col-9"></section>
+        <section class="esh-orders_detail-item esh-orders_detail-item--mark col-2">$ {{order.total |
+          number:'.2-2'}}</section>
+      </article>
+    </section>
+  </div>
+</div>
