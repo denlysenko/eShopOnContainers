@@ -66,6 +66,9 @@ export const exchange = process.env.EXCHANGE;
           type: 'topic',
         },
       ],
+      connectionInitOptions: {
+        wait: false,
+      },
     }),
     DatabaseModule,
   ],
