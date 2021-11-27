@@ -53,6 +53,10 @@ export class OrderReadDto {
   @Expose()
   public readonly country: string;
 
+  @ApiProperty()
+  @Expose()
+  public readonly state: string;
+
   @ApiProperty({
     type: OrderItemReadDto,
     isArray: true,
@@ -60,4 +64,15 @@ export class OrderReadDto {
   @Expose()
   @Type(() => OrderItemReadDto)
   public readonly orderItems: OrderItemReadDto[];
+
+  @ApiProperty()
+  @Expose()
+  @Transform(({ obj }) =>
+    obj.orderItems.reduce((acc: number, orderItem: OrderItemReadDto) => {
+      acc += orderItem.unitPrice * orderItem.units;
+
+      return acc;
+    }, 0)
+  )
+  public readonly total: number;
 }

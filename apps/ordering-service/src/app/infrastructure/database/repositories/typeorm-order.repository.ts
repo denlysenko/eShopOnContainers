@@ -34,6 +34,7 @@ export class TypeOrmOrderRepository implements OrderRepository {
         'order.country',
         'order.street',
         'order.zipCode',
+        'order.state',
         'os.name',
         'oi.productName',
         'oi.units',
