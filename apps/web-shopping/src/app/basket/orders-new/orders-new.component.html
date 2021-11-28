@@ -1,0 +1,189 @@
+<div class="esh-orders_new-header">
+  <div class="container">
+    <a class="esh-orders_new-back"
+       routerLink="/basket">Back to basket</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="alert alert-warning esh-orders_new-alert"
+       role="alert"
+       [hidden]="(errorReceived$ | async) === false">
+    Not possible to create a new order, please try later on
+  </div>
+  <form [formGroup]="newOrderForm"
+        (ngSubmit)="submitForm()">
+    <section class="esh-orders_new-section">
+      <h4 class="esh-orders_new-title">Shipping Address</h4>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['street'].valid && newOrderForm.controls['street'].touched}">
+            <label class="esh-orders_new-title">Address</label>
+            <input class="form-control form-input"
+                   type="text"
+                   placeholder="Street"
+                   formControlName="street">
+            <div *ngIf="newOrderForm.controls['street'].hasError('required') && newOrderForm.controls['street'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['city'].valid && newOrderForm.controls['city'].touched}">
+            <label class="esh-orders_new-title">City</label>
+            <input class="form-control form-input"
+                   type="text"
+                   placeholder="City"
+                   formControlName="city">
+            <div *ngIf="newOrderForm.controls['city'].hasError('required') && newOrderForm.controls['city'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['state'].valid && newOrderForm.controls['state'].touched}">
+            <label class="esh-orders_new-title">State</label>
+            <input class="form-control form-input"
+                   type="text"
+                   placeholder="State"
+                   formControlName="state">
+            <div *ngIf="newOrderForm.controls['state'].hasError('required') && newOrderForm.controls['state'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['country'].valid && newOrderForm.controls['country'].touched}">
+            <label class="esh-orders_new-title">Country</label>
+            <input class="form-control form-input"
+                   type="text"
+                   placeholder="Country"
+                   formControlName="country">
+            <div *ngIf="newOrderForm.controls['country'].hasError('required') && newOrderForm.controls['country'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['zipCode'].valid && newOrderForm.controls['zipCode'].touched}">
+            <label class="esh-orders_new-title">ZIPCODE</label>
+            <input class="form-control form-input form-input-small"
+                   type="text"
+                   placeholder="00000"
+                   formControlName="zipCode">
+            <div *ngIf="newOrderForm.controls['zipCode'].hasError('required') && newOrderForm.controls['zipCode'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="esh-orders_new-section">
+      <h4 class="esh-orders_new-title">Payment method</h4>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="custom-control custom-radio"
+               *ngFor="let cardType of (cardTypes$ | async)">
+            <input [id]="cardType.id"
+                   type="radio"
+                   class="custom-control-input"
+                   formControlName="cardTypeId"
+                   [value]="cardType.id">
+            <label class="custom-control-label"
+                   [for]="cardType.id">{{cardType.name}}</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['cardNumber'].valid && newOrderForm.controls['cardNumber'].touched}">
+            <label class="esh-orders_new-title">Card number</label>
+            <input class="form-control form-input"
+                   type="text"
+                   placeholder="000000000000000"
+                   formControlName="cardNumber">
+            <div *ngIf="newOrderForm.controls['cardNumber'].hasError('required') && newOrderForm.controls['cardNumber'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['cardHolderName'].valid && newOrderForm.controls['cardHolderName'].touched}">
+            <label class="esh-orders_new-title">Cardholder name</label>
+            <input class="form-control form-input"
+                   type="text"
+                   placeholder="Card holder"
+                   formControlName="cardHolderName">
+            <div *ngIf="newOrderForm.controls['cardHolderName'].hasError('required') && newOrderForm.controls['cardHolderName'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['expirationDate'].valid && newOrderForm.controls['expirationDate'].touched}">
+            <label class="esh-orders_new-title">Expiration date</label>
+            <input class="form-control form-input form-input-medium"
+                   type="text"
+                   placeholder="MM/YY"
+                   formControlName="expirationDate">
+            <div *ngIf="newOrderForm.controls['expirationDate'].hasError('required') && newOrderForm.controls['expirationDate'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group"
+               [ngClass]="{'has-error':!newOrderForm.controls['cardSecurityNumber'].valid && newOrderForm.controls['cardSecurityNumber'].touched}">
+            <label class="esh-orders_new-title">Security code</label>
+            <input class="form-control form-input form-input-small"
+                   type="text"
+                   placeholder="000"
+                   formControlName="cardSecurityNumber">
+            <div *ngIf="newOrderForm.controls['cardSecurityNumber'].hasError('required') && newOrderForm.controls['cardSecurityNumber'].touched"
+                 class="alert alert-danger">Required field.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="esh-orders_new-section">
+      <article class="esh-orders_new-titles row">
+        <section class="esh-orders_new-title col-12">Order details</section>
+      </article>
+
+      <article class="esh-orders_new-items esh-orders_new-items--border row"
+               *ngFor="let item of basketItems$ | async">
+        <section class="esh-orders_new-item col-md-4 hidden-md-down">
+          <img class="esh-orders_new-image"
+               src="{{item.pictureUrl}}">
+        </section>
+        <section class="esh-orders_new-item esh-orders_new-item--middle col-4">{{item.productName}}</section>
+        <section class="esh-orders_new-item esh-orders_new-item--middle col-1">$ {{item.unitPrice | number:'.2-2'}}
+        </section>
+        <section class="esh-orders_new-item esh-orders_new-item--middle col-1">{{item.quantity}}</section>
+        <section class="esh-orders_new-item esh-orders_new-item--middle col-2">$ {{(item.quantity * item.unitPrice) |
+          number:'.2-2'}}</section>
+      </article>
+    </section>
+
+    <section class="esh-orders_new-section esh-orders_new-section--right">
+      <article class="esh-orders_new-titles row">
+        <section class="esh-orders_new-title col-9"></section>
+        <section class="esh-orders_new-title col-2">Total</section>
+      </article>
+
+      <article class="esh-orders_new-items row">
+        <section class="esh-orders_new-item col-9"></section>
+        <section class="esh-orders_new-item esh-orders_new-item--mark col-2">$ {{total | number:'.2-2'}}</section>
+      </article>
+    </section>
+    <section class="esh-orders_new-section">
+      <div class="form-group row">
+        <div class="col-md-9">
+        </div>
+        <div class="col-md-3">
+          <button type="submit"
+                  class="btn esh-orders_new-placeOrder"
+                  [disabled]="!newOrderForm.valid || (isOrderProcessing$ | async) === true">[ Place Order ]</button>
+        </div>
+      </div>
+    </section>
+  </form>
+</div>
