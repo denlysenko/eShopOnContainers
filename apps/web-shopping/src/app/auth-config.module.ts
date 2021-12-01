@@ -17,7 +17,7 @@ import { environment } from '../environments/environment';
         renewTimeBeforeTokenExpiresInSeconds: 120,
         ignoreNonceAfterRefresh: true,
         secureRoutes: [environment.apiUrl],
-        logLevel: LogLevel.Debug,
+        logLevel: environment.production ? LogLevel.None : LogLevel.Debug,
       },
     }),
   ],

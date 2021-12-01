@@ -22,6 +22,7 @@ services:
     environment:
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
       - EXCHANGE=e-shop-on-containers:dev
+      - KEYKLOAK_FRONTEND_HOST=localhost:4000
     ports:
       - '3001:3000'
     depends_on:
@@ -53,6 +54,7 @@ services:
     environment:
       - EVENT_BUS_CONNECTION=amqp://rabbitmq:5672
       - EXCHANGE=e-shop-on-containers:dev
+      - KEYKLOAK_FRONTEND_HOST=localhost:4000
     ports:
       - '3003:3000'
     depends_on:
@@ -67,14 +69,21 @@ services:
     environment:
       - KEYKLOAK_FRONTEND_HOST=localhost:4000
       - RESOURCE_SERVER_URL=http://identity-service:8080/auth/realms/e-shop-on-containers
-      - WEB_SHOPPING_URL=http://localhost:4200
+      - WEB_SHOPPING_URL=http://localhost
       - BASKET_URL=http://basket-service:3000
       - CATALOG_URL=http://catalog-service:3000
       - ORDERING_URL=http://ordering-service:3000
     ports:
-      - '3004:3000'
+      - '8080:3000'
     depends_on:
       - basket-service
+  
+  web-shopping:
+    build:
+      context: .
+      dockerfile: ./apps/web-shopping/docker/Dockerfile
+    ports:
+      - '80:80'
 
   postgres:
     container_name: postgres
