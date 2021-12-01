@@ -26,7 +26,7 @@ export class BasketSharedService {
     this._basketItemsSource
       .asObservable()
       .pipe(switchMap(() => this._getBasket()))
-  ).pipe(shareReplay({ refCount: true }));
+  ).pipe(shareReplay({ refCount: true, bufferSize: 1 }));
 
   constructor(private readonly _httpClient: HttpClient) {}
 

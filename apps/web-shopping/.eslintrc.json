@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "e-shop-on-containers",
+            "prefix": "esh",
             "style": "kebab-case"
           }
         ]

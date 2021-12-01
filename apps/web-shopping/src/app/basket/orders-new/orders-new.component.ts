@@ -8,7 +8,7 @@ import { BasketSharedService } from '../../shared/services/basket-shared.service
 import { BasketService } from '../basket.service';
 
 @Component({
-  selector: 'esh-orders_new',
+  selector: 'esh-orders-new',
   styleUrls: ['./orders-new.component.scss'],
   templateUrl: './orders-new.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,7 +17,7 @@ export class OrdersNewComponent {
   private readonly _isOrderProcessing = new BehaviorSubject<boolean>(false);
   private readonly _errorReceived = new BehaviorSubject<boolean>(false);
 
-  public total: number = 0;
+  public total = 0;
 
   public readonly isOrderProcessing$: Observable<boolean> =
     this._isOrderProcessing.asObservable();
