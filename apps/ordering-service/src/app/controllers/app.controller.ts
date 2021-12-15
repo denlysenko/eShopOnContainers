@@ -32,7 +32,7 @@ import { exceptionFactory } from '../exception.factory';
 import { AuthGuard } from '../infrastructure';
 import { Identity } from './decorators/identity';
 
-@Controller('v1/orders')
+@Controller('api/v1/orders')
 @UseGuards(AuthGuard)
 @ApiTags('Orders')
 export class AppController {

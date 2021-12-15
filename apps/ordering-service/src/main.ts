@@ -22,7 +22,6 @@ async function bootstrap() {
     new FastifyAdapter()
   );
 
-  app.setGlobalPrefix('api');
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
   app.useGlobalInterceptors(new HttpLoggingInterceptor());

@@ -7,6 +7,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   CancelOrderCommandHandler,
@@ -24,7 +25,7 @@ import {
   SetStockRejectedStatusCommandHandler,
   ShipOrderCommandHandler,
 } from './application';
-import { AppController } from './controllers';
+import { AppController, HealthController } from './controllers';
 import {
   BuyerRepository,
   BUYER_REPOSITORY,
@@ -71,8 +72,9 @@ export const exchange = process.env.EXCHANGE;
       },
     }),
     DatabaseModule,
+    TerminusModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [
     MessageProcessor,
     GracePeriodConfirmedConsumer,
