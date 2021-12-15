@@ -25,7 +25,7 @@ import {
 import { exceptionFactory } from '../exception.factory';
 import { Identity } from './decorators/identity';
 
-@Controller('v1/basket')
+@Controller('api/v1/basket')
 @ApiTags('Customer Basket')
 export class AppController {
   constructor(private readonly _appService: AppService) {}

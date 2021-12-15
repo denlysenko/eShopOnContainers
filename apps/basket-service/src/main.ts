@@ -22,7 +22,6 @@ async function bootstrap() {
     new FastifyAdapter()
   );
 
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
   app.useGlobalInterceptors(new HttpLoggingInterceptor());
@@ -39,8 +38,7 @@ async function bootstrap() {
       type: 'oauth2',
       flows: {
         implicit: {
-          authorizationUrl:
-            `http://${identityHost}/auth/realms/e-shop-on-containers/protocol/openid-connect/auth`,
+          authorizationUrl: `http://${identityHost}/auth/realms/e-shop-on-containers/protocol/openid-connect/auth`,
           scopes: {
             openid: 'openid',
           },
