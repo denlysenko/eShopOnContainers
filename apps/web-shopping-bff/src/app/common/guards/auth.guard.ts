@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate {
     const introspectUrl = `${process.env.RESOURCE_SERVER_URL}/protocol/openid-connect/token/introspect`;
     const username = process.env.RESOURCE_SERVER_CLIENT_ID;
     const password = process.env.RESOURCE_SERVER_CLIENT_SECRET;
-    const host = process.env.KEYKLOAK_FRONTEND_HOST;
+    const host = process.env.KEYCLOAK_FRONTEND_HOST;
     const auth =
       'Basic ' + Buffer.from(username + ':' + password).toString('base64');
 

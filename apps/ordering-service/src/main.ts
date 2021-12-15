@@ -28,7 +28,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   const host = process.env.HOST || 'localhost';
-  const identityHost = process.env.KEYKLOAK_FRONTEND_HOST || 'localhost:4000';
+  const identityHost = process.env.KEYCLOAK_FRONTEND_HOST || 'localhost:4000';
 
   const config = new DocumentBuilder()
     .setVersion('v1')
@@ -40,8 +40,7 @@ async function bootstrap() {
       type: 'oauth2',
       flows: {
         implicit: {
-          authorizationUrl:
-            `http://${identityHost}/auth/realms/e-shop-on-containers/protocol/openid-connect/auth`,
+          authorizationUrl: `http://${identityHost}/auth/realms/e-shop-on-containers/protocol/openid-connect/auth`,
           scopes: {
             openid: 'openid',
           },
