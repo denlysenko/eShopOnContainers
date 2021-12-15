@@ -20,7 +20,7 @@ import { OrderReadDto } from './dto/order-read.dto';
 import { OrderSummaryDto } from './dto/order-summary.dto';
 import { OrdersService } from './orders.service';
 
-@Controller('v1/orders')
+@Controller('api/v1/orders')
 @UseGuards(AuthGuard)
 @ApiTags('Orders')
 export class OrdersController {

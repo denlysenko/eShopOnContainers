@@ -25,7 +25,7 @@ import { BasketItemCreateDto } from './dto/basket-item-create.dto';
 import { BasketReadDto } from './dto/basket-read.dto';
 import { ValidationErrorDto } from './dto/validation-error.dto';
 
-@Controller('v1/basket')
+@Controller('api/v1/basket')
 @UseGuards(AuthGuard)
 @ApiTags('Customer Basket')
 export class BasketController {

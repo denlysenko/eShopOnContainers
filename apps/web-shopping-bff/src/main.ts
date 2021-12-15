@@ -18,7 +18,6 @@ async function bootstrap() {
     new FastifyAdapter()
   );
 
-  app.setGlobalPrefix('api');
   app.enableCors({
     origin: [process.env.WEB_SHOPPING_URL],
   });

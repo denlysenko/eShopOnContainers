@@ -22,7 +22,7 @@ import { CatalogTypeReadDto } from './dto/catalog-type-read.dto';
 
 const DEFAULT_PAGE_SIZE = 10;
 
-@Controller('v1/catalog')
+@Controller('api/v1/catalog')
 export class CatalogController {
   constructor(private readonly _catalogService: CatalogService) {}
 
