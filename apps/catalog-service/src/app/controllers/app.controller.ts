@@ -32,7 +32,7 @@ import {
   ValidationErrorDto,
 } from '../application';
 
-@Controller('v1/catalog')
+@Controller('api/v1/catalog')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 

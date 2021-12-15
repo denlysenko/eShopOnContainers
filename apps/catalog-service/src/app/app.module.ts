@@ -5,6 +5,7 @@ import {
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Logger, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AppService,
@@ -19,7 +20,7 @@ import {
   OUTBOX_REPOSITORY,
   UnitOfWork,
 } from './application';
-import { AppController } from './controllers';
+import { AppController, HealthController } from './controllers';
 import {
   DatabaseModule,
   MessageProcessor,
@@ -53,8 +54,9 @@ const exchange = process.env.EXCHANGE;
       },
     }),
     DatabaseModule,
+    TerminusModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [
     MessageProcessor,
     {

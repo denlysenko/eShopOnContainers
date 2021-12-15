@@ -23,7 +23,6 @@ async function bootstrap() {
     new FastifyAdapter()
   );
 
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
   app.useGlobalFilters(
     new CatalogDomainExceptionFilter(),
