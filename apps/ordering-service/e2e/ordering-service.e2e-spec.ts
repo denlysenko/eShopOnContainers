@@ -82,11 +82,11 @@ describe('Ordering service', () => {
     accessToken = jwt.sign({ sub: buyers[0].identityGuid }, 'qwerty');
   });
 
-  describe('/GET v1/orders', () => {
+  describe('/GET api/v1/orders', () => {
     it('returns 401 if Authorization token not passed', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/orders',
+        path: '/api/v1/orders',
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -95,7 +95,7 @@ describe('Ordering service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/orders',
+        path: '/api/v1/orders',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -123,11 +123,11 @@ describe('Ordering service', () => {
     });
   });
 
-  describe('/GET v1/orders/:id', () => {
+  describe('/GET api/v1/orders/:id', () => {
     it('returns 401 if Authorization token not passed', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/orders/${order.id}`,
+        path: `/api/v1/orders/${order.id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -138,7 +138,7 @@ describe('Ordering service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/orders/${id}`,
+        path: `/api/v1/orders/${id}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -154,7 +154,7 @@ describe('Ordering service', () => {
     it('returns 404 if buyer not exists', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/orders/${order.id}`,
+        path: `/api/v1/orders/${order.id}`,
         headers: {
           Authorization: `Bearer ${jwt.sign({ sub: 'not_exists' }, 'qwerty')}`,
         },
@@ -170,7 +170,7 @@ describe('Ordering service', () => {
     it('returns 404 if order is not belong to buyer identity', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/orders/${order.id}`,
+        path: `/api/v1/orders/${order.id}`,
         headers: {
           Authorization: `Bearer ${jwt.sign(
             { sub: buyers[1].identityGuid },
@@ -189,7 +189,7 @@ describe('Ordering service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/orders/${order.id}`,
+        path: `/api/v1/orders/${order.id}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -209,8 +209,10 @@ describe('Ordering service', () => {
         city: 'City',
         zipCode: '123456',
         country: 'Country',
+        state: null,
         date: '2021-10-10T12:40:20.288Z',
         status,
+        total: 18.78,
         orderItems: [
           {
             pictureUrl: null,
@@ -235,11 +237,11 @@ describe('Ordering service', () => {
     });
   });
 
-  describe('/PUT v1/orders/:id/cancel', () => {
+  describe('/PUT api/v1/orders/:id/cancel', () => {
     it('returns 401 if Authorization token not passed', async () => {
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${order.id}/cancel`,
+        path: `/api/v1/orders/${order.id}/cancel`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -250,7 +252,7 @@ describe('Ordering service', () => {
 
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${id}/cancel`,
+        path: `/api/v1/orders/${id}/cancel`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -266,7 +268,7 @@ describe('Ordering service', () => {
     it('returns 400 if cancelling failed due to PAID status', async () => {
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${order.id}/cancel`,
+        path: `/api/v1/orders/${order.id}/cancel`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -293,7 +295,7 @@ describe('Ordering service', () => {
 
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${order.id}/cancel`,
+        path: `/api/v1/orders/${order.id}/cancel`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -310,11 +312,11 @@ describe('Ordering service', () => {
     });
   });
 
-  describe('/PUT v1/orders/:id/ship', () => {
+  describe('/PUT api/v1/orders/:id/ship', () => {
     it('returns 401 if Authorization token not passed', async () => {
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${order.id}/ship`,
+        path: `/api/v1/orders/${order.id}/ship`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -325,7 +327,7 @@ describe('Ordering service', () => {
 
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${id}/ship`,
+        path: `/api/v1/orders/${id}/ship`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -350,7 +352,7 @@ describe('Ordering service', () => {
 
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${order.id}/ship`,
+        path: `/api/v1/orders/${order.id}/ship`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -368,7 +370,7 @@ describe('Ordering service', () => {
     it('returns 200 if shipping successful', async () => {
       const response = await app.inject({
         method: 'PUT',
-        path: `/v1/orders/${order.id}/ship`,
+        path: `/api/v1/orders/${order.id}/ship`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -385,11 +387,11 @@ describe('Ordering service', () => {
     });
   });
 
-  describe('/POST v1/orders/draft', () => {
+  describe('/POST api/v1/orders/draft', () => {
     it('returns 401 if Authorization token not passed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/orders/draft',
+        path: '/api/v1/orders/draft',
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -398,7 +400,7 @@ describe('Ordering service', () => {
     it('returns 422 if items not passed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/orders/draft',
+        path: '/api/v1/orders/draft',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -415,7 +417,7 @@ describe('Ordering service', () => {
     it('returns 422 if validation failed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/orders/draft',
+        path: '/api/v1/orders/draft',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -440,7 +442,7 @@ describe('Ordering service', () => {
     it('returns order draft', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/orders/draft',
+        path: '/api/v1/orders/draft',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -475,11 +477,11 @@ describe('Ordering service', () => {
     });
   });
 
-  describe('/GET v1/orders/card-types', () => {
+  describe('/GET api/v1/orders/card-types', () => {
     it('returns 401 if Authorization token not passed', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/orders/card-types',
+        path: '/api/v1/orders/card-types',
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -488,7 +490,7 @@ describe('Ordering service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/orders/card-types',
+        path: '/api/v1/orders/card-types',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

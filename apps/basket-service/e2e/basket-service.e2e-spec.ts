@@ -58,11 +58,11 @@ describe('Basket service', () => {
     accessToken = jwt.sign({ sub: basketItem.buyerId }, 'qwerty');
   });
 
-  describe('/GET v1/basket', () => {
+  describe('/GET api/v1/basket', () => {
     it('returns 401 if token not provided', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -71,7 +71,7 @@ describe('Basket service', () => {
     it('returns empty array if basket not found', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${jwt.sign({ sub: notExistsId }, 'qwerty')}`,
         },
@@ -87,7 +87,7 @@ describe('Basket service', () => {
     it('returns customer basket', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -114,7 +114,7 @@ describe('Basket service', () => {
     });
   });
 
-  describe('/POST v1/basket', () => {
+  describe('/POST api/v1/basket', () => {
     let basketItemsDto: BasketItemCreateDto[];
 
     beforeEach(() => {
@@ -133,7 +133,7 @@ describe('Basket service', () => {
     it('returns 401 if token not provided', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         payload: basketItemsDto,
       });
 
@@ -143,7 +143,7 @@ describe('Basket service', () => {
     it('returns 422 if validation failed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -177,7 +177,7 @@ describe('Basket service', () => {
 
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -208,7 +208,7 @@ describe('Basket service', () => {
 
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${jwt.sign({ sub: notExistsId }, 'qwerty')}`,
         },
@@ -227,7 +227,7 @@ describe('Basket service', () => {
     });
   });
 
-  describe('/POST v1/basket/checkout', () => {
+  describe('/POST api/v1/basket/checkout', () => {
     let basketCheckoutDto: BasketCheckoutDto;
 
     beforeEach(() => {
@@ -249,7 +249,7 @@ describe('Basket service', () => {
     it('returns 401 if token not provided', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket/checkout',
+        path: '/api/v1/basket/checkout',
         payload: basketCheckoutDto,
       });
 
@@ -259,7 +259,7 @@ describe('Basket service', () => {
     it('returns 404 if basket not exists', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket/checkout',
+        path: '/api/v1/basket/checkout',
         headers: {
           Authorization: `Bearer ${jwt.sign({ sub: notExistsId }, 'qwerty')}`,
         },
@@ -272,7 +272,7 @@ describe('Basket service', () => {
     it('returns 422 if validation failed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket/checkout',
+        path: '/api/v1/basket/checkout',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -292,7 +292,7 @@ describe('Basket service', () => {
     it('returns 200 if checkout succeeded', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/basket/checkout',
+        path: '/api/v1/basket/checkout',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -303,11 +303,11 @@ describe('Basket service', () => {
     });
   });
 
-  describe('/DELETE v1/basket', () => {
+  describe('/DELETE api/v1/basket', () => {
     it('returns 401 if token not provided', async () => {
       const response = await app.inject({
         method: 'DELETE',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
       });
 
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
@@ -316,7 +316,7 @@ describe('Basket service', () => {
     it('returns 404 if basket not exists', async () => {
       const response = await app.inject({
         method: 'DELETE',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${jwt.sign({ sub: notExistsId }, 'qwerty')}`,
         },
@@ -328,7 +328,7 @@ describe('Basket service', () => {
     it('returns 200 if delete succeeded', async () => {
       const response = await app.inject({
         method: 'DELETE',
-        path: '/v1/basket',
+        path: '/api/v1/basket',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

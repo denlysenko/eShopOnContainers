@@ -71,6 +71,7 @@ describe('OrderQueries', () => {
         city: 'City',
         zipCode: '123456',
         country: 'Country',
+        state: undefined,
         date: '2021-10-10T12:40:20.288Z',
         description: null,
         orderItems: [
@@ -88,6 +89,7 @@ describe('OrderQueries', () => {
           },
         ],
         status: 'New',
+        total: 6,
       });
     });
   });

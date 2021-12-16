@@ -51,11 +51,11 @@ describe('Catalog service', () => {
     await seedCatalogItems(connection);
   });
 
-  describe('/GET v1/catalog/items', () => {
+  describe('/GET /apiv1/catalog/items', () => {
     it('without query params', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/items',
+        path: '/api/v1/catalog/items',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -71,7 +71,7 @@ describe('Catalog service', () => {
     it('with pageIndex query param', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/items?pageIndex=1',
+        path: '/api/v1/catalog/items?pageIndex=1',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -89,7 +89,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items?pageSize=${pageSize}`,
+        path: `/api/v1/catalog/items?pageSize=${pageSize}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -108,7 +108,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+        path: `/api/v1/catalog/items?pageSize=${pageSize}&pageIndex=${pageIndex}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -126,7 +126,7 @@ describe('Catalog service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/items',
+        path: '/api/v1/catalog/items',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -156,13 +156,13 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/GET v1/catalog/items/:id', () => {
+  describe('/GET api/v1/catalog/items/:id', () => {
     it('returns transformed record', async () => {
       const id = catalogItems[0].id;
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -196,7 +196,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.NOT_FOUND);
@@ -207,13 +207,13 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/GET v1/catalog/items/withname/:name', () => {
+  describe('/GET api/v1/catalog/items/withname/:name', () => {
     const name = 'prism';
 
     it('without query params', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/withname/${name}`,
+        path: `/api/v1/catalog/items/withname/${name}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -229,7 +229,7 @@ describe('Catalog service', () => {
     it('with pageIndex query param', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/withname/${name}?pageIndex=1`,
+        path: `/api/v1/catalog/items/withname/${name}?pageIndex=1`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -247,7 +247,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/withname/${name}?pageSize=${pageSize}`,
+        path: `/api/v1/catalog/items/withname/${name}?pageSize=${pageSize}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -266,7 +266,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/withname/${name}?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+        path: `/api/v1/catalog/items/withname/${name}?pageSize=${pageSize}&pageIndex=${pageIndex}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -282,7 +282,7 @@ describe('Catalog service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/withname/${name}`,
+        path: `/api/v1/catalog/items/withname/${name}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -314,7 +314,7 @@ describe('Catalog service', () => {
     it('returns empty array if name not exists', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/items/withname/not_exists',
+        path: '/api/v1/catalog/items/withname/not_exists',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -326,11 +326,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/GET v1/catalog/items/type/:catalogTypeId/brand/:catalogBrandId', () => {
+  describe('/GET api/v1/catalog/items/type/:catalogTypeId/brand/:catalogBrandId', () => {
     it('without query params', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -346,7 +346,7 @@ describe('Catalog service', () => {
     it('with pageIndex query param', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}?pageIndex=1`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}?pageIndex=1`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -364,7 +364,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}?pageSize=${pageSize}`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}?pageSize=${pageSize}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -383,7 +383,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}?pageSize=${pageSize}&pageIndex=${pageIndex}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -399,7 +399,7 @@ describe('Catalog service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[1].id}/brand/${catalogBrands[1].id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -431,7 +431,7 @@ describe('Catalog service', () => {
     it('returns empty array if catalog type not exists', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/100/brand/${catalogBrands[1].id}`,
+        path: `/api/v1/catalog/items/type/100/brand/${catalogBrands[1].id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -445,7 +445,7 @@ describe('Catalog service', () => {
     it('returns empty array if catalog brand not exists', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[1].id}/brand/100`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[1].id}/brand/100`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -457,11 +457,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/GET v1/catalog/items/type/all/brand/:catalogBrandId', () => {
+  describe('/GET api/v1/catalog/items/type/all/brand/:catalogBrandId', () => {
     it('without query params', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/all/brand/${catalogBrands[1].id}`,
+        path: `/api/v1/catalog/items/type/all/brand/${catalogBrands[1].id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -477,7 +477,7 @@ describe('Catalog service', () => {
     it('with pageIndex query param', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/all/brand/${catalogBrands[1].id}?pageIndex=1`,
+        path: `/api/v1/catalog/items/type/all/brand/${catalogBrands[1].id}?pageIndex=1`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -495,7 +495,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/all/brand/${catalogBrands[1].id}?pageSize=${pageSize}`,
+        path: `/api/v1/catalog/items/type/all/brand/${catalogBrands[1].id}?pageSize=${pageSize}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -514,7 +514,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/all/brand/${catalogBrands[1].id}?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+        path: `/api/v1/catalog/items/type/all/brand/${catalogBrands[1].id}?pageSize=${pageSize}&pageIndex=${pageIndex}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -530,7 +530,7 @@ describe('Catalog service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/all/brand/${catalogBrands[1].id}`,
+        path: `/api/v1/catalog/items/type/all/brand/${catalogBrands[1].id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -562,7 +562,7 @@ describe('Catalog service', () => {
     it('returns empty array if catalog type not exists', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/items/type/all/brand/100',
+        path: '/api/v1/catalog/items/type/all/brand/100',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -574,11 +574,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/GET v1/catalog/items/type/:catalogTypeId/brand/all', () => {
+  describe('/GET api/v1/catalog/items/type/:catalogTypeId/brand/all', () => {
     it('without query params', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[0].id}/brand/all`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -594,7 +594,7 @@ describe('Catalog service', () => {
     it('with pageIndex query param', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageIndex=1`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageIndex=1`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -612,7 +612,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageSize=${pageSize}`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageSize=${pageSize}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -631,7 +631,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageSize=${pageSize}&pageIndex=${pageIndex}`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[0].id}/brand/all?pageSize=${pageSize}&pageIndex=${pageIndex}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -647,7 +647,7 @@ describe('Catalog service', () => {
     it('returns transformed records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: `/v1/catalog/items/type/${catalogTypes[0].id}/brand/all`,
+        path: `/api/v1/catalog/items/type/${catalogTypes[0].id}/brand/all`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -679,7 +679,7 @@ describe('Catalog service', () => {
     it('returns empty array if catalog type not exists', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/items/type/all/brand/100',
+        path: '/api/v1/catalog/items/type/all/brand/100',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -691,13 +691,13 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/PATCH v1/catalog/items:id', () => {
+  describe('/PATCH api/v1/catalog/items:id', () => {
     it('returns 404 if item not found', async () => {
       const id = 25;
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
         payload: {
           name: 'Updated',
         },
@@ -715,7 +715,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
         payload: {
           name: '',
         },
@@ -737,7 +737,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
         payload: {
           name: 'Updated',
         },
@@ -770,11 +770,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/POST v1/catalog/items', () => {
+  describe('/POST api/v1/catalog/items', () => {
     it('returns 422 if validation failed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/catalog/items',
+        path: '/api/v1/catalog/items',
         payload: {
           description: '.NET Bot Black Hoodie, and more',
           pictureFileName: '1.png',
@@ -807,7 +807,7 @@ describe('Catalog service', () => {
     it('returns created catalog item', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/catalog/items',
+        path: '/api/v1/catalog/items',
         payload: {
           name: '.NET New item',
           description: '.NET New item',
@@ -850,13 +850,13 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/DELETE v1/catalog/items/:id', () => {
+  describe('/DELETE api/v1/catalog/items/:id', () => {
     it('returns 404 if item not found', async () => {
       const id = 25;
 
       const response = await app.inject({
         method: 'DELETE',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.NOT_FOUND);
@@ -871,18 +871,18 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'DELETE',
-        path: `/v1/catalog/items/${id}`,
+        path: `/api/v1/catalog/items/${id}`,
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
     });
   });
 
-  describe('/GET v1/api/catalog/catalog-types', () => {
+  describe('/GET api/v1/catalog/catalog-types', () => {
     it('returns found records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/catalog-types',
+        path: '/api/v1/catalog/catalog-types',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -896,13 +896,13 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/PATCH v1/api/catalog/catalog-types/:id', () => {
+  describe('/PATCH api/v1/catalog/catalog-types/:id', () => {
     it('returns 404 if type not found', async () => {
       const id = 25;
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/catalog-types/${id}`,
+        path: `/api/v1/catalog/catalog-types/${id}`,
         payload: {
           type: 'Updated',
         },
@@ -920,7 +920,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/catalog-types/${id}`,
+        path: `/api/v1/catalog/catalog-types/${id}`,
         payload: {
           type: '',
         },
@@ -942,7 +942,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/catalog-types/${id}`,
+        path: `/api/v1/catalog/catalog-types/${id}`,
         payload: {
           type: 'Updated',
         },
@@ -959,11 +959,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/POST v1/api/catalog/catalog-types', () => {
+  describe('/POST api/v1/catalog/catalog-types', () => {
     it('returns 422 if validation failed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/catalog/catalog-types',
+        path: '/api/v1/catalog/catalog-types',
         payload: {
           type: '',
         },
@@ -985,7 +985,7 @@ describe('Catalog service', () => {
     it('returns created catalog type', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/catalog/catalog-types',
+        path: '/api/v1/catalog/catalog-types',
         payload: {
           type: 'New catalog type',
         },
@@ -1002,11 +1002,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/GET v1/api/catalog/catalog-brands', () => {
+  describe('/GET api/v1/catalog/catalog-brands', () => {
     it('returns found records', async () => {
       const response = await app.inject({
         method: 'GET',
-        path: '/v1/catalog/catalog-brands',
+        path: '/api/v1/catalog/catalog-brands',
       });
 
       expect(response.statusCode).toBe(HttpStatus.OK);
@@ -1020,13 +1020,13 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/PATCH v1/api/catalog/catalog-brands/:id', () => {
+  describe('/PATCH api/v1/catalog/catalog-brands/:id', () => {
     it('returns 404 if brand not found', async () => {
       const id = 25;
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/catalog-brands/${id}`,
+        path: `/api/v1/catalog/catalog-brands/${id}`,
         payload: {
           brand: 'Updated',
         },
@@ -1044,7 +1044,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/catalog-brands/${id}`,
+        path: `/api/v1/catalog/catalog-brands/${id}`,
         payload: {
           brand: '',
         },
@@ -1066,7 +1066,7 @@ describe('Catalog service', () => {
 
       const response = await app.inject({
         method: 'PATCH',
-        path: `/v1/catalog/catalog-brands/${id}`,
+        path: `/api/v1/catalog/catalog-brands/${id}`,
         payload: {
           brand: 'Updated',
         },
@@ -1083,11 +1083,11 @@ describe('Catalog service', () => {
     });
   });
 
-  describe('/POST v1/api/catalog/catalog-brands', () => {
+  describe('/POST api/v1/catalog/catalog-brands', () => {
     it('returns 422 if validation failed', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/catalog/catalog-brands',
+        path: '/api/v1/catalog/catalog-brands',
         payload: {
           brand: '',
         },
@@ -1109,7 +1109,7 @@ describe('Catalog service', () => {
     it('returns created catalog brand', async () => {
       const response = await app.inject({
         method: 'POST',
-        path: '/v1/catalog/catalog-brands',
+        path: '/api/v1/catalog/catalog-brands',
         payload: {
           brand: 'New catalog brand',
         },
