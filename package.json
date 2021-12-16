@@ -69,6 +69,7 @@
     "@nrwl/node": "13.3.6",
     "@nrwl/tao": "13.3.6",
     "@nrwl/workspace": "13.3.6",
+    "@nx-tools/nx-docker": "^2.0.2",
     "@types/cron": "^1.7.3",
     "@types/jest": "27.0.3",
     "@types/jsonwebtoken": "^8.5.6",

@@ -58,6 +58,22 @@
             "codeCoverage": false,
             "passWithNoTests": true
           }
+        },
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "push": true
+          },
+          "configurations": {
+            "app": {
+              "file": "apps/basket-service/docker/build-app/Dockerfile",
+              "tags": ["denlysenko/eshop-basket-service-api:v1"]
+            },
+            "db-migrations": {
+              "file": "apps/basket-service/docker/run-migrations/Dockerfile",
+              "tags": ["denlysenko/eshop-basket-service-db-migrations:latest"]
+            }
+          }
         }
       },
       "tags": []
@@ -118,6 +134,22 @@
             "jestConfig": "apps/catalog-service/jest-e2e.config.js",
             "codeCoverage": false,
             "passWithNoTests": true
+          }
+        },
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "push": true
+          },
+          "configurations": {
+            "app": {
+              "file": "apps/catalog-service/docker/build-app/Dockerfile",
+              "tags": ["denlysenko/eshop-catalog-service-api:v1"]
+            },
+            "db-migrations": {
+              "file": "apps/catalog-service/docker/run-migrations/Dockerfile",
+              "tags": ["denlysenko/eshop-catalog-service-db-migrations:latest"]
+            }
           }
         }
       },
@@ -226,6 +258,22 @@
             "codeCoverage": false,
             "passWithNoTests": true
           }
+        },
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "push": true
+          },
+          "configurations": {
+            "app": {
+              "file": "apps/ordering-service/docker/build-app/Dockerfile",
+              "tags": ["denlysenko/eshop-ordering-service-api:v1"]
+            },
+            "db-migrations": {
+              "file": "apps/ordering-service/docker/run-migrations/Dockerfile",
+              "tags": ["denlysenko/eshop-ordering-service-db-migrations:latest"]
+            }
+          }
         }
       },
       "tags": []
@@ -320,6 +368,14 @@
             "jestConfig": "apps/web-shopping/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "push": true,
+            "file": "apps/web-shopping/docker/Dockerfile",
+            "tags": ["denlysenko/eshop-web-shopping:latest"]
+          }
         }
       },
       "tags": []
@@ -372,6 +428,14 @@
           "options": {
             "jestConfig": "apps/web-shopping-bff/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "push": true,
+            "file": "apps/web-shopping-bff/docker/build-app/Dockerfile",
+            "tags": ["denlysenko/eshop-web-shopping-bff:v1"]
           }
         }
       },
