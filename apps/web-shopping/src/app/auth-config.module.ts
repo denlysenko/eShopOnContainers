@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
   imports: [
     AuthModule.forRoot({
       config: {
-        authority: 'http://localhost:4000/auth/realms/e-shop-on-containers',
+        authority: `${environment.ssoUrl}/auth/realms/e-shop-on-containers`,
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
         clientId: 'web_shopping',
