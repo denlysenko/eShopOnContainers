@@ -1,0 +1,6 @@
+# Default values for e-shop.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+  EVENT_BUS_CONNECTION: amqp://rabbitmq:5672
+  EXCHANGE: e-shop-on-containers:dev

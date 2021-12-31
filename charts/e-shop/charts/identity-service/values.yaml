@@ -1,0 +1,92 @@
+replicaCount: 1
+
+image:
+  repository: jboss/keycloak
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "identity-service"
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+  statsPort: 9990
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: sso.e-shop.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  secret: e-shop-secret
+  values:
+    - name: DB_VENDOR
+      value: postgres
+    - name: DB_ADDR
+      value: postgres:5432
+    - name: DB_DATABASE
+      value: $(PG_IDENTITY_DB)
+    - name: DB_USER
+      value: $(PG_IDENTITY_USER)
+    - name: DB_PASSWORD
+      value: $(PG_IDENTITY_PASSWORD)
+    - name: KEYCLOAK_USER
+      value: $(KEYCLOAK_USER)
+    - name: KEYCLOAK_PASSWORD
+      value: $(KEYCLOAK_PASSWORD)
+    - name: KEYCLOAK_STATISTICS
+      value: db,http
+
+livenessProbe:
+  enabled: true
+  path: /health
+  port: 9990
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 20
+  failureThreshold: 1
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  path: /health
+  port: 9990
+  timeoutSeconds: 3
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  failureThreshold: 2
+  successThreshold: 1

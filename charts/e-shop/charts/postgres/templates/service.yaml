@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "postgres.fullname" . }}
+  labels: {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: postgresql
+      name: postgresql
+  selector: {{- include "postgres.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.loadBalancer.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.loadBalancer.name | quote }}
+  labels: {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: postgresql
+      name: postgresql
+  selector: {{- include "postgres.selectorLabels" . | nindent 4 }}
+{{- end }}

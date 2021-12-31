@@ -1,0 +1,94 @@
+replicaCount: 1
+
+image:
+  repository: denlysenko/eshop-web-shopping-bff
+  pullPolicy: IfNotPresent
+  tag: v1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "web-shopping-bff"
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+  hosts:
+    - host: e-shop.local
+      paths:
+        - path: /api/v1/orders.*
+          pathType: ImplementationSpecific
+        - path: /api/v1/catalog/.*
+          pathType: ImplementationSpecific
+        - path: /api/v1/basket.*
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  secret: e-shop-secret
+  values:
+    - name: KEYCLOAK_FRONTEND_HOST
+      value: sso.e-shop.local
+    - name: RESOURCE_SERVER_URL
+      value: http://identity-service:8080/auth/realms/e-shop-on-containers
+    - name: KEYCLOAK_HEALTH_CHECK_URL
+      value: http://identity-service:9990/health
+    - name: WEB_SHOPPING_URL
+      value: e-shop.local
+    - name: BASKET_URL
+      value: http://basket-service:3000
+    - name: CATALOG_URL
+      value: http://catalog-service:3000
+    - name: ORDERING_URL
+      value: http://ordering-service:3000
+
+livenessProbe:
+  enabled: true
+  path: /health
+  port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 60
+  timeoutSeconds: 20
+  failureThreshold: 1
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  path: /health
+  port: 3000
+  timeoutSeconds: 3
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  failureThreshold: 2
+  successThreshold: 1

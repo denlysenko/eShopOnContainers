@@ -1,8 +1,12 @@
 **/node_modules/
+/node_modules/
+/charts/
+/dist/
 .dockerignore
 .git
 .gitignore
 .vscode
+.angular
 docker-compose*.yml
 *.md
 LICENSE
