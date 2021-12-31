@@ -4,6 +4,7 @@ module.exports = class Initial1633960911149 {
     name = 'Initial1633960911149'
 
     async up(queryRunner) {
+        await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         await queryRunner.query(`CREATE TABLE "card_types" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_2e832349781fa27274c3dbdeb30" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "payment_methods" ("id" SERIAL NOT NULL, "cardHolderName" character varying NOT NULL, "alias" character varying, "cardNumber" character varying NOT NULL, "expiration" TIMESTAMP NOT NULL, "cardTypeId" integer NOT NULL, "buyerId" integer NOT NULL, CONSTRAINT "PK_34f9b8c6dfb4ac3559f7e2820d1" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "buyers" ("id" SERIAL NOT NULL, "identityGuid" character varying NOT NULL, "name" character varying NOT NULL, CONSTRAINT "UQ_cc18074e04ccf2419b25c19bc7b" UNIQUE ("identityGuid"), CONSTRAINT "PK_aff372821d05bac04a18ff8eb87" PRIMARY KEY ("id"))`);

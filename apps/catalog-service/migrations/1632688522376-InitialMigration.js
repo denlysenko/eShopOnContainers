@@ -4,6 +4,7 @@ module.exports = class InitialMigration1632688522376 {
     name = 'InitialMigration1632688522376'
 
     async up(queryRunner) {
+        await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         await queryRunner.query(`CREATE TABLE "catalog_type" ("id" SERIAL NOT NULL, "type" character varying NOT NULL, CONSTRAINT "PK_ddcc971c9b8acf3cf16c56234db" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "catalog_item" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "price" integer NOT NULL, "pictureFileName" character varying NOT NULL, "pictureUri" character varying NOT NULL, "catalogTypeId" integer, "catalogBrandId" integer, "availableStock" integer NOT NULL, "restockThreshold" integer NOT NULL, "maxStockThreshold" integer NOT NULL, "onReorder" boolean NOT NULL, CONSTRAINT "PK_8996a1f608499554f35bec8601e" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "catalog_brand" ("id" SERIAL NOT NULL, "brand" character varying NOT NULL, CONSTRAINT "PK_0741c02e568d8a41ca20bd54ce8" PRIMARY KEY ("id"))`);
