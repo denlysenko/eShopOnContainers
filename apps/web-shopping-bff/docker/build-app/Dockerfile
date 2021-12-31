@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install --development
 COPY . .
-RUN npm run build -- web-shopping-bff --prod
+RUN npm run build -- web-shopping-bff
 
 FROM node:16.10.0-alpine3.14 AS prod
 COPY --from=build /app/dist/apps/web-shopping-bff .
